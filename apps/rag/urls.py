@@ -1,9 +1,8 @@
 from django.urls import path
-from .views import SearchAPI, SegmentDetailAPI, SegmentExportAPI, SegmentListCreateAPI
+from .views import KnowledgeUploadAPI, KnowledgeSearchAPI, KnowledgeDetailAPI
 
 urlpatterns = [
-    path("segments/", SegmentListCreateAPI.as_view(), name="segment-list-create"),
-    path("segments/export/", SegmentExportAPI.as_view(), name="segment-export"),  # before <segment_id>
-    path("segments/<str:segment_id>/", SegmentDetailAPI.as_view(), name="segment-detail"),
-    path("search/", SearchAPI.as_view(), name="search"),
+    path("knowledge/", KnowledgeUploadAPI.as_view(), name="knowledge-upload"),
+    path("knowledge/<uuid:id>/", KnowledgeDetailAPI.as_view(), name="knowledge-detail"),
+    path("knowledge/search/", KnowledgeSearchAPI.as_view(), name="knowledge-search"),
 ]

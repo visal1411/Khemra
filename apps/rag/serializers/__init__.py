@@ -1,4 +1,11 @@
-from .SegmentInputSerializer import SegmentInputSerializer
-from .SearchRequestSerializer import SearchRequestSerializer
+from .KnowledgeInputSerializer import KnowledgeInputSerializer
+from .KnowledgeSearchRequestSerializer import KnowledgeSearchRequestSerializer
+from .KnowledgeSearchResponseSerializer import KnowledgeSearchResponseSerializer
+from .KnowledgeDetailSerializer import KnowledgeDetailSerializer
 
-__all__ = ["SegmentInputSerializer", "SearchRequestSerializer"]
+__all__ = [
+    "KnowledgeInputSerializer",
+    "KnowledgeSearchRequestSerializer",
+    "KnowledgeSearchResponseSerializer",
+    "KnowledgeDetailSerializer",
+]

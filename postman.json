@@ -1,0 +1,176 @@
+{
+  "info": {
+    "_postman_id": "c1f24d77-628f-4d92-9f33-1463e26bbbb0",
+    "name": "Khemra RAG API Collection",
+    "description": "Postman collection to test the Knowledge RAG API (Ingestion, Search, Details) and legacy endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "knowledge_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Knowledge API (New)",
+      "item": [
+        {
+          "name": "Upload Knowledge (PDF)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    pm.collectionVariables.set('knowledge_id', json.id);",
+                  "    console.log('Saved knowledge_id:', json.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Corporate Code of Conduct and Compliance Handbook\",\n  \"description\": \"Annual compliance document covering ethical behavior, anti-bribery regulations, and whistleblower protections.\",\n  \"source_type\": \"pdf\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_data\": \"JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=\",\n      \"page_count\": 24\n    },\n    {\n      \"language\": \"km\",\n      \"file_data\": \"JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=\",\n      \"page_count\": 26\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Equal Opportunity & Anti-Harassment Policy\",\n      \"summary\": \"Mandates a respectful work environment prohibiting harassment, discrimination, or retaliation based on gender, race, or religion.\",\n      \"transcript\": \"Chapter 1: Workplace Respect. Our company is committed to maintaining a diverse, safe, and inclusive work culture.\",\n      \"page_start\": 1,\n      \"page_end\": 4,\n      \"keywords\": [\"harassment\", \"discrimination\", \"diversity\", \"workplace respect\", \"equal opportunity\"],\n      \"possible_questions\": [\n        \"What is the company policy on workplace harassment?\",\n        \"How does the company handle discriminatory complaints?\"\n      ]\n    },\n    {\n      \"segment_index\": 1,\n      \"title\": \"Gift and Entertainment Policy\",\n      \"summary\": \"Sets monetary gift limits ($50 max) and reporting procedures to avoid conflicts of interest with vendors and clients.\",\n      \"transcript\": \"Chapter 2: Conflicts of Interest and Gifts. Employees may not accept gifts valued above $50.\",\n      \"page_start\": 5,\n      \"page_end\": 8,\n      \"keywords\": [\"gifts\", \"bribery\", \"conflict of interest\", \"vendor entertainment\", \"compliance threshold\"],\n      \"possible_questions\": [\n        \"Can I accept a gift from a vendor or client?\",\n        \"What is the maximum allowed gift value before reporting?\"\n      ]\n    },\n    {\n      \"segment_index\": 2,\n      \"title\": \"Whistleblower Protection and Reporting Channels\",\n      \"summary\": \"Explains confidential reporting channels, anonymous hotlines, and non-retaliation guarantees for whistleblowers.\",\n      \"transcript\": \"Chapter 3: Speaking Up. If you suspect unethical behavior, you are protected under our non-retaliation policy.\",\n      \"page_start\": 9,\n      \"page_end\": 14,\n      \"keywords\": [\"whistleblower\", \"anonymous hotline\", \"non-retaliation\", \"ethics reporting\"],\n      \"possible_questions\": [\n        \"How can I report a compliance violation anonymously?\",\n        \"Am I protected from retaliation if I report misconduct?\"\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", ""]
+            },
+            "description": "Upload a PDF document with metadata and segments. The backend generates 384-d AI embeddings for each metadata type."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Knowledge (Video)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Company Onboarding & Welcome Orientation\",\n  \"description\": \"Welcome video training session for new hires.\",\n  \"source_type\": \"video\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_data\": \"AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDE=\",\n      \"duration_seconds\": 360.0\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Company Values & Culture\",\n      \"summary\": \"Overview of mission, core values, and community engagement.\",\n      \"transcript\": \"Welcome! Today we cover our key values: respect, innovation, and trust.\",\n      \"start_time_seconds\": 0.0,\n      \"end_time_seconds\": 120.0,\n      \"keywords\": [\"culture\", \"mission\", \"values\"],\n      \"possible_questions\": [\n        \"What are our company core values?\"\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", ""]
+            },
+            "description": "Upload a video knowledge item with timestamped segments."
+          },
+          "response": []
+        },
+        {
+          "name": "Search Knowledge (Semantic Search)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Can I accept a gift or dinner from a vendor?\",\n  \"top_k\": 3,\n  \"threshold\": 0.25,\n  \"language\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", ""]
+            },
+            "description": "Performs AI embedding search across all metadata types (keyword, question, topic, summary) and combines scores using weights."
+          },
+          "response": []
+        },
+        {
+          "name": "Search Knowledge with Custom Weights",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I report harassment anonymously?\",\n  \"top_k\": 3,\n  \"threshold\": 0.25,\n  \"language\": \"en\",\n  \"weights\": {\n    \"question\": 0.5,\n    \"summary\": 0.3,\n    \"keyword\": 0.2\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", ""]
+            },
+            "description": "Search with custom weights for each metadata type."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Knowledge Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/{{knowledge_id}}/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "{{knowledge_id}}", ""]
+            },
+            "description": "Fetch status, sources, and segments of an ingested knowledge item."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Legacy Video API (Untouched)",
+      "item": [
+        {
+          "name": "Search Video Segments (Legacy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What are the safety protocols?\",\n  \"top_k\": 3,\n  \"threshold\": 0.3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "search", ""]
+            },
+            "description": "Legacy segment search endpoint used by aq.py."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

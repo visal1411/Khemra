@@ -1,10 +1,10 @@
 services:
   web:
     build: .
-    # migrate -> try to load seed JSON (never blocks startup) -> start server
+    # migrate -> seed metadata types -> start server
     command: >
       sh -c "python manage.py migrate &&
-             (python manage.py load_segments seed_data/video_segments.json || echo 'Seed load skipped') &&
+             python manage.py seed_metadata_types &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
       FASTEMBED_CACHE_DIR: /app/.cache/fastembed

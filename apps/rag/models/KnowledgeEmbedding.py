@@ -42,7 +42,7 @@ class KnowledgeEmbedding(models.Model):
         help_text='[{"text": "How do I apply for leave?", "vector": [...]}]',
     )
     embedding_vector = VectorField(
-        dimensions=1536,
+        dimensions=384,
         help_text="vector of this one item",
     )
     model_name = models.CharField(max_length=100)

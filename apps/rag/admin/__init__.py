@@ -1,5 +1,13 @@
-from .VideoAdmin import VideoAdmin
-from .VideoSegmentAdmin import VideoSegmentAdmin
-from .SegmentEmbeddingAdmin import SegmentEmbeddingAdmin
+from .KnowledgeAdmin import KnowledgeAdmin
+from .KnowledgeSourceAdmin import KnowledgeSourceAdmin
+from .KnowledgeSegmentAdmin import KnowledgeSegmentAdmin
+from .KnowledgeEmbeddingAdmin import KnowledgeEmbeddingAdmin
+from .MetadataTypeAdmin import MetadataTypeAdmin
 
-__all__ = ["VideoAdmin", "VideoSegmentAdmin", "SegmentEmbeddingAdmin"]
+__all__ = [
+    "KnowledgeAdmin",
+    "KnowledgeSourceAdmin",
+    "KnowledgeSegmentAdmin",
+    "KnowledgeEmbeddingAdmin",
+    "MetadataTypeAdmin",
+]

@@ -1,6 +1,9 @@
-from .SegmentListCreateAPI import SegmentListCreateAPI
-from .SegmentExportAPI import SegmentExportAPI
-from .SegmentDetailAPI import SegmentDetailAPI
-from .SearchAPI import SearchAPI
+from .KnowledgeUploadAPI import KnowledgeUploadAPI
+from .KnowledgeSearchAPI import KnowledgeSearchAPI
+from .KnowledgeDetailAPI import KnowledgeDetailAPI
 
-__all__ = ["SegmentListCreateAPI", "SegmentExportAPI", "SegmentDetailAPI", "SearchAPI"]
+__all__ = [
+    "KnowledgeUploadAPI",
+    "KnowledgeSearchAPI",
+    "KnowledgeDetailAPI",
+]
