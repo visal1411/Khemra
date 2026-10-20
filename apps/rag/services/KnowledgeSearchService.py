@@ -69,6 +69,7 @@ class KnowledgeSearchService:
                     matched_source = {
                         "id": lang_match.id,
                         "language": lang_match.language,
+                        "file_url": lang_match.file_url or "",
                         "duration_seconds": lang_match.duration_seconds,
                         "page_count": lang_match.page_count,
                         "is_fallback": False,
@@ -79,6 +80,7 @@ class KnowledgeSearchService:
                     matched_source = {
                         "id": fallback.id,
                         "language": fallback.language,
+                        "file_url": fallback.file_url or "",
                         "duration_seconds": fallback.duration_seconds,
                         "page_count": fallback.page_count,
                         "is_fallback": True,

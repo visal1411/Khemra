@@ -10,7 +10,7 @@ Output: list of dicts — each dict becomes one KnowledgeEmbedding row:
   }
 
 Metadata types produced (aligned with ContentType constants):
-  keyword  -> all keywords joined in ONE item (single keywords are too short to embed well)
+  keyword  -> ONE item PER keyword (individual vector per keyword)
   question -> ONE item PER question (question-to-question matching is the strongest signal)
   topic    -> the title
   summary  -> the summary
@@ -21,15 +21,15 @@ class EmbeddingTextBuilder:
     def build(self, segment):
         items = []
 
-        # keywords -> single joined embedding
-        keywords = [k.strip() for k in segment.get("keywords") or [] if k and k.strip()]
-        if keywords:
-            items.append({
-                "metadata_type": "keyword",
-                "item_index": 0,
-                "text": ", ".join(keywords),
-                "field_kwargs": {"keywords": [{"text": k} for k in keywords]},
-            })
+        # keywords -> one embedding per keyword
+        for idx, k in enumerate(segment.get("keywords") or []):
+            if k and k.strip():
+                items.append({
+                    "metadata_type": "keyword",
+                    "item_index": idx,
+                    "text": k.strip(),
+                    "field_kwargs": {"keywords": [{"text": k.strip()}]},
+                })
 
         # possible_questions -> one embedding per question
         for idx, q in enumerate(segment.get("possible_questions") or []):

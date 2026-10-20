@@ -45,7 +45,8 @@ class KnowledgeIngestService:
                 KnowledgeSource.objects.create(
                     knowledge=knowledge,
                     language=src["language"],
-                    file_data=raw_bytes,
+                    file_data=raw_bytes if raw_bytes else None,
+                    file_url=src.get("file_url") or "",
                     duration_seconds=src.get("duration_seconds"),
                     page_count=src.get("page_count"),
                 )

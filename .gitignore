@@ -32,3 +32,14 @@ model_cache/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Markdown documentation
+*.md
+
+# Media & Video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+video_base64.txt

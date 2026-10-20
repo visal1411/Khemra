@@ -11,7 +11,8 @@ class KnowledgeSource(models.Model):
         db_column="knowledge_id",
     )
     language = models.CharField(max_length=10)
-    file_data = models.BinaryField(help_text="the actual file bytes")
+    file_data = models.BinaryField(null=True, blank=True, help_text="the actual file bytes")
+    file_url = models.CharField(max_length=1000, null=True, blank=True, help_text="URL to file in S3/CDN/external storage")
     duration_seconds = models.FloatField(null=True, blank=True)
     page_count = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

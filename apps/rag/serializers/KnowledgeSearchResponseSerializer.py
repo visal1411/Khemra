@@ -4,6 +4,7 @@ from rest_framework import serializers
 class MatchedSourceSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     language = serializers.CharField()
+    file_url = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     duration_seconds = serializers.FloatField(allow_null=True)
     page_count = serializers.IntegerField(allow_null=True)
     is_fallback = serializers.BooleanField(default=False)

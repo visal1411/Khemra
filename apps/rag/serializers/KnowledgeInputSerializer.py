@@ -6,6 +6,7 @@ from apps.rag.models.enums import SourceType
 class KnowledgeSourceInputSerializer(serializers.Serializer):
     language = serializers.CharField(max_length=10, required=True)
     file_data = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    file_url = serializers.CharField(max_length=1000, required=False, allow_blank=True, allow_null=True)
     duration_seconds = serializers.FloatField(required=False, allow_null=True)
     page_count = serializers.IntegerField(required=False, allow_null=True)
 

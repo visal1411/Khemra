@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "c1f24d77-628f-4d92-9f33-1463e26bbbb0",
-    "name": "Khemra RAG API Collection",
-    "description": "Postman collection to test the Knowledge RAG API (Ingestion, Search, Details) and legacy endpoints.",
+    "name": "Khemra Knowledge RAG & Catalog API",
+    "description": "Complete Postman collection for the Khemra RAG API (Ingestion, Multi-signal Vector Search, and Details) and Catalog API. Includes automated test scripts to capture knowledge_id into collection variables.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -19,10 +19,10 @@
   ],
   "item": [
     {
-      "name": "1. Knowledge API (New)",
+      "name": "1. Knowledge Ingestion (Upload)",
       "item": [
         {
-          "name": "Upload Knowledge (PDF)",
+          "name": "Upload Knowledge - Video (Cloud URL - Recommended)",
           "event": [
             {
               "listen": "test",
@@ -30,8 +30,10 @@
                 "exec": [
                   "if (pm.response.code === 201) {",
                   "    var json = pm.response.json();",
-                  "    pm.collectionVariables.set('knowledge_id', json.id);",
-                  "    console.log('Saved knowledge_id:', json.id);",
+                  "    if (json.id) {",
+                  "        pm.collectionVariables.set('knowledge_id', json.id);",
+                  "        console.log('Saved knowledge_id:', json.id);",
+                  "    }",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -48,19 +50,36 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Corporate Code of Conduct and Compliance Handbook\",\n  \"description\": \"Annual compliance document covering ethical behavior, anti-bribery regulations, and whistleblower protections.\",\n  \"source_type\": \"pdf\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_data\": \"JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=\",\n      \"page_count\": 24\n    },\n    {\n      \"language\": \"km\",\n      \"file_data\": \"JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=\",\n      \"page_count\": 26\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Equal Opportunity & Anti-Harassment Policy\",\n      \"summary\": \"Mandates a respectful work environment prohibiting harassment, discrimination, or retaliation based on gender, race, or religion.\",\n      \"transcript\": \"Chapter 1: Workplace Respect. Our company is committed to maintaining a diverse, safe, and inclusive work culture.\",\n      \"page_start\": 1,\n      \"page_end\": 4,\n      \"keywords\": [\"harassment\", \"discrimination\", \"diversity\", \"workplace respect\", \"equal opportunity\"],\n      \"possible_questions\": [\n        \"What is the company policy on workplace harassment?\",\n        \"How does the company handle discriminatory complaints?\"\n      ]\n    },\n    {\n      \"segment_index\": 1,\n      \"title\": \"Gift and Entertainment Policy\",\n      \"summary\": \"Sets monetary gift limits ($50 max) and reporting procedures to avoid conflicts of interest with vendors and clients.\",\n      \"transcript\": \"Chapter 2: Conflicts of Interest and Gifts. Employees may not accept gifts valued above $50.\",\n      \"page_start\": 5,\n      \"page_end\": 8,\n      \"keywords\": [\"gifts\", \"bribery\", \"conflict of interest\", \"vendor entertainment\", \"compliance threshold\"],\n      \"possible_questions\": [\n        \"Can I accept a gift from a vendor or client?\",\n        \"What is the maximum allowed gift value before reporting?\"\n      ]\n    },\n    {\n      \"segment_index\": 2,\n      \"title\": \"Whistleblower Protection and Reporting Channels\",\n      \"summary\": \"Explains confidential reporting channels, anonymous hotlines, and non-retaliation guarantees for whistleblowers.\",\n      \"transcript\": \"Chapter 3: Speaking Up. If you suspect unethical behavior, you are protected under our non-retaliation policy.\",\n      \"page_start\": 9,\n      \"page_end\": 14,\n      \"keywords\": [\"whistleblower\", \"anonymous hotline\", \"non-retaliation\", \"ethics reporting\"],\n      \"possible_questions\": [\n        \"How can I report a compliance violation anonymously?\",\n        \"Am I protected from retaliation if I report misconduct?\"\n      ]\n    }\n  ]\n}"
+              "raw": "{\n  \"title\": \"Company Onboarding & Welcome Orientation\",\n  \"description\": \"Welcome video training session for new hires.\",\n  \"source_type\": \"video\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_url\": \"https://example.com/videos/onboarding_en.mp4\",\n      \"duration_seconds\": 60.0\n    },\n    {\n      \"language\": \"km\",\n      \"file_url\": \"https://example.com/videos/onboarding_km.mp4\",\n      \"duration_seconds\": 60.0\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Introduction & Welcome\",\n      \"summary\": \"Greeting new employees, introducing core values and company culture.\",\n      \"transcript\": \"Welcome to the company orientation program. In this session, we will cover our history and values.\",\n      \"start_time_seconds\": 0.0,\n      \"end_time_seconds\": 30.0,\n      \"keywords\": [\n        \"onboarding\",\n        \"welcome\",\n        \"values\",\n        \"culture\"\n      ],\n      \"possible_questions\": [\n        \"What is the company orientation about?\",\n        \"Where can I learn about company values?\"\n      ]\n    },\n    {\n      \"segment_index\": 1,\n      \"title\": \"Workspace & Tools Setup\",\n      \"summary\": \"Setting up communication tools, Slack channels, and contacting IT support.\",\n      \"transcript\": \"Next, let's look at setting up your accounts, Slack, email, and who to contact in IT support.\",\n      \"start_time_seconds\": 30.0,\n      \"end_time_seconds\": 60.0,\n      \"keywords\": [\n        \"IT support\",\n        \"accounts\",\n        \"tools\",\n        \"slack\"\n      ],\n      \"possible_questions\": [\n        \"How do I set up my company accounts?\",\n        \"Who do I contact for IT help?\",\n        \"How do I use Slack to talk to IT support?\"\n      ]\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/rag/knowledge/",
               "host": ["{{base_url}}"],
               "path": ["api", "rag", "knowledge", ""]
             },
-            "description": "Upload a PDF document with metadata and segments. The backend generates 384-d AI embeddings for each metadata type."
+            "description": "Upload a video knowledge document with direct cloud/S3 URLs (`file_url`). The backend generates 384-dimensional FastEmbed embeddings for topic, summary, questions, and keywords individually."
           },
           "response": []
         },
         {
-          "name": "Upload Knowledge (Video)",
+          "name": "Upload Knowledge - Video (Order & Delivery Guide)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.id) {",
+                  "        pm.collectionVariables.set('knowledge_id', json.id);",
+                  "        console.log('Saved knowledge_id:', json.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -71,19 +90,36 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Company Onboarding & Welcome Orientation\",\n  \"description\": \"Welcome video training session for new hires.\",\n  \"source_type\": \"video\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_data\": \"AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDE=\",\n      \"duration_seconds\": 360.0\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Company Values & Culture\",\n      \"summary\": \"Overview of mission, core values, and community engagement.\",\n      \"transcript\": \"Welcome! Today we cover our key values: respect, innovation, and trust.\",\n      \"start_time_seconds\": 0.0,\n      \"end_time_seconds\": 120.0,\n      \"keywords\": [\"culture\", \"mission\", \"values\"],\n      \"possible_questions\": [\n        \"What are our company core values?\"\n      ]\n    }\n  ]\n}"
+              "raw": "{\n  \"title\": \"Order Management & Delivery Guide\",\n  \"description\": \"Customer guide on managing orders and live courier tracking.\",\n  \"source_type\": \"video\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_url\": \"https://example.com/videos/delivery_en.mp4\",\n      \"duration_seconds\": 60.0\n    },\n    {\n      \"language\": \"km\",\n      \"file_url\": \"https://example.com/videos/delivery_km.mp4\",\n      \"duration_seconds\": 60.0\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Placing Orders and Checkout\",\n      \"summary\": \"Step-by-step instructions on adding items to cart and checking out.\",\n      \"transcript\": \"In this section, we show you how to select items, add them to your cart, and proceed to checkout.\",\n      \"start_time_seconds\": 0.0,\n      \"end_time_seconds\": 30.0,\n      \"keywords\": [\n        \"cart\",\n        \"checkout\",\n        \"order\",\n        \"payment\"\n      ],\n      \"possible_questions\": [\n        \"How do I place an order?\",\n        \"What payment methods are supported at checkout?\"\n      ]\n    },\n    {\n      \"segment_index\": 1,\n      \"title\": \"Tracking Your Delivery\",\n      \"summary\": \"Walkthrough on checking order status and live courier tracking.\",\n      \"transcript\": \"To track your delivery, open the orders tab and view live status.\",\n      \"start_time_seconds\": 30.0,\n      \"end_time_seconds\": 60.0,\n      \"keywords\": [\n        \"order status\",\n        \"delivery\",\n        \"tracking\",\n        \"courier\"\n      ],\n      \"possible_questions\": [\n        \"How do I track my delivery status?\",\n        \"Can I track the courier in real time?\"\n      ]\n    }\n  ]\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/rag/knowledge/",
               "host": ["{{base_url}}"],
               "path": ["api", "rag", "knowledge", ""]
             },
-            "description": "Upload a video knowledge item with timestamped segments."
+            "description": "Uploads order tracking and delivery guide knowledge with timestamped video segments."
           },
           "response": []
         },
         {
-          "name": "Search Knowledge (Semantic Search)",
+          "name": "Upload Knowledge - PDF (Handbook with URL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.id) {",
+                  "        pm.collectionVariables.set('knowledge_id', json.id);",
+                  "        console.log('Saved knowledge_id:', json.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -94,19 +130,19 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"question\": \"Can I accept a gift or dinner from a vendor?\",\n  \"top_k\": 3,\n  \"threshold\": 0.25,\n  \"language\": \"en\"\n}"
+              "raw": "{\n  \"title\": \"Corporate Code of Conduct and Compliance Handbook\",\n  \"description\": \"Annual compliance document covering ethical behavior, anti-bribery regulations, and whistleblower protections.\",\n  \"source_type\": \"pdf\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_url\": \"https://example.com/documents/compliance_handbook_en.pdf\",\n      \"page_count\": 24\n    },\n    {\n      \"language\": \"km\",\n      \"file_url\": \"https://example.com/documents/compliance_handbook_km.pdf\",\n      \"page_count\": 26\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Equal Opportunity & Anti-Harassment Policy\",\n      \"summary\": \"Mandates a respectful work environment prohibiting harassment, discrimination, or retaliation based on gender, race, or religion.\",\n      \"transcript\": \"Chapter 1: Workplace Respect. Our company is committed to maintaining a diverse, safe, and inclusive work culture.\",\n      \"page_start\": 1,\n      \"page_end\": 4,\n      \"keywords\": [\n        \"harassment\",\n        \"discrimination\",\n        \"diversity\",\n        \"workplace respect\",\n        \"equal opportunity\"\n      ],\n      \"possible_questions\": [\n        \"What is the company policy on workplace harassment?\",\n        \"How does the company handle discriminatory complaints?\"\n      ]\n    },\n    {\n      \"segment_index\": 1,\n      \"title\": \"Gift and Entertainment Policy\",\n      \"summary\": \"Sets monetary gift limits ($50 max) and reporting procedures to avoid conflicts of interest with vendors and clients.\",\n      \"transcript\": \"Chapter 2: Conflicts of Interest and Gifts. Employees may not accept gifts valued above $50.\",\n      \"page_start\": 5,\n      \"page_end\": 8,\n      \"keywords\": [\n        \"gifts\",\n        \"bribery\",\n        \"conflict of interest\",\n        \"vendor entertainment\",\n        \"compliance threshold\"\n      ],\n      \"possible_questions\": [\n        \"Can I accept a gift from a vendor or client?\",\n        \"What is the maximum allowed gift value before reporting?\"\n      ]\n    },\n    {\n      \"segment_index\": 2,\n      \"title\": \"Whistleblower Protection and Reporting Channels\",\n      \"summary\": \"Explains confidential reporting channels, anonymous hotlines, and non-retaliation guarantees for whistleblowers.\",\n      \"transcript\": \"Chapter 3: Speaking Up. If you suspect unethical behavior, you are protected under our non-retaliation policy.\",\n      \"page_start\": 9,\n      \"page_end\": 14,\n      \"keywords\": [\n        \"whistleblower\",\n        \"anonymous hotline\",\n        \"non-retaliation\",\n        \"ethics reporting\"\n      ],\n      \"possible_questions\": [\n        \"How can I report a compliance violation anonymously?\",\n        \"Am I protected from retaliation if I report misconduct?\"\n      ]\n    }\n  ]\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "raw": "{{base_url}}/api/rag/knowledge/",
               "host": ["{{base_url}}"],
-              "path": ["api", "rag", "knowledge", "search", ""]
+              "path": ["api", "rag", "knowledge", ""]
             },
-            "description": "Performs AI embedding search across all metadata types (keyword, question, topic, summary) and combines scores using weights."
+            "description": "Upload a PDF document with page ranges and direct file URLs."
           },
           "response": []
         },
         {
-          "name": "Search Knowledge with Custom Weights",
+          "name": "Upload Knowledge - Legacy (Base64 Binary)",
           "request": {
             "method": "POST",
             "header": [
@@ -117,19 +153,121 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"question\": \"How do I report harassment anonymously?\",\n  \"top_k\": 3,\n  \"threshold\": 0.25,\n  \"language\": \"en\",\n  \"weights\": {\n    \"question\": 0.5,\n    \"summary\": 0.3,\n    \"keyword\": 0.2\n  }\n}"
+              "raw": "{\n  \"title\": \"Quick Guide (Base64 Upload)\",\n  \"description\": \"Demonstrates uploading file_data as raw Base64 bytes directly in database.\",\n  \"source_type\": \"pdf\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_data\": \"JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=\",\n      \"page_count\": 5\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Introduction\",\n      \"summary\": \"Summary of quick guide content.\",\n      \"transcript\": \"Welcome to the short guide.\",\n      \"page_start\": 1,\n      \"page_end\": 5,\n      \"keywords\": [\"guide\", \"quickstart\"],\n      \"possible_questions\": [\"What is in this quick guide?\"]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", ""]
+            },
+            "description": "Upload a document using legacy base64 file_data (stored directly in DB BinaryField)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Knowledge Search (Semantic AI)",
+      "item": [
+        {
+          "name": "Search Knowledge - Video (Slack / IT Support)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I use Slack to talk to IT support?\",\n  \"language\": \"en\",\n  \"top_k\": 3,\n  \"threshold\": 0.25\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/rag/knowledge/search/",
               "host": ["{{base_url}}"],
               "path": ["api", "rag", "knowledge", "search", ""]
             },
-            "description": "Search with custom weights for each metadata type."
+            "description": "Searches across video segments. Matches segment 1 of the onboarding video and returns start_time_seconds, end_time_seconds, and matched_source with file_url."
           },
           "response": []
         },
         {
-          "name": "Get Knowledge Detail",
+          "name": "Search Knowledge - Order Delivery (Khmer Language)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I track my delivery status?\",\n  \"language\": \"km\",\n  \"top_k\": 3,\n  \"threshold\": 0.30\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", ""]
+            },
+            "description": "Performs search with language='km'. If the Khmer source exists, matched_source returns the Khmer video file_url (is_fallback: false); otherwise falls back to English (is_fallback: true)."
+          },
+          "response": []
+        },
+        {
+          "name": "Search Knowledge - PDF (Gifts & Vendor Policy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Can I accept a gift or dinner from a vendor?\",\n  \"language\": \"en\",\n  \"top_k\": 3,\n  \"threshold\": 0.25\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", ""]
+            },
+            "description": "Performs AI embedding search matching PDF segments and returns page_start, page_end, and file_url."
+          },
+          "response": []
+        },
+        {
+          "name": "Search Knowledge - Custom Weights",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I report harassment anonymously?\",\n  \"language\": \"en\",\n  \"top_k\": 3,\n  \"threshold\": 0.25,\n  \"weights\": {\n    \"question\": 0.40,\n    \"keyword\": 0.30,\n    \"summary\": 0.20,\n    \"topic\": 0.10\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", ""]
+            },
+            "description": "Search using customized scoring weights for question, keyword, summary, and topic vectors."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Knowledge Detail",
+      "item": [
+        {
+          "name": "Get Knowledge Detail by ID",
           "request": {
             "method": "GET",
             "header": [],
@@ -138,35 +276,26 @@
               "host": ["{{base_url}}"],
               "path": ["api", "rag", "knowledge", "{{knowledge_id}}", ""]
             },
-            "description": "Fetch status, sources, and segments of an ingested knowledge item."
+            "description": "Fetches complete knowledge record including all sources (with file_url and duration_seconds/page_count) and all segments with timestamps and keywords."
           },
           "response": []
         }
       ]
     },
     {
-      "name": "2. Legacy Video API (Untouched)",
+      "name": "4. Catalog API (Legacy)",
       "item": [
         {
-          "name": "Search Video Segments (Legacy)",
+          "name": "Get Products List",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"question\": \"What are the safety protocols?\",\n  \"top_k\": 3,\n  \"threshold\": 0.3\n}"
-            },
+            "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{base_url}}/api/rag/search/",
+              "raw": "{{base_url}}/api/products/",
               "host": ["{{base_url}}"],
-              "path": ["api", "rag", "search", ""]
+              "path": ["api", "products", ""]
             },
-            "description": "Legacy segment search endpoint used by aq.py."
+            "description": "Fetch catalog products list."
           },
           "response": []
         }

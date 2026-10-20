@@ -5,7 +5,7 @@ from apps.rag.models import Knowledge, KnowledgeSource, KnowledgeSegment
 class KnowledgeSourceDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = KnowledgeSource
-        fields = ["id", "language", "duration_seconds", "page_count"]
+        fields = ["id", "language", "file_url", "duration_seconds", "page_count"]
 
 
 class KnowledgeSegmentDetailSerializer(serializers.ModelSerializer):
