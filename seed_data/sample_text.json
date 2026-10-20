@@ -1,0 +1,50 @@
+{
+  "title": "API Rate Limiting and Quota Guidelines",
+  "description": "Technical documentation explaining request rate limits, burst thresholds, and HTTP 429 status response handling.",
+  "source_type": "text",
+  "sources": [
+    {
+      "language": "en",
+      "file_data": "IyBBUEkgUmF0ZSBMaW1pdGluZyBhbmQgUXVvdGEgR3VpZGVsaW5lcy4uLg=="
+    },
+    {
+      "language": "km",
+      "file_data": "IyDgpYjgpYngpYsg4KWL4KWn4KWh4KWI4KWJ...=="
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 0,
+      "title": "Default Tier Rate Limits",
+      "summary": "Standard tier API keys are capped at 60 requests per minute and 10,000 requests per calendar day.",
+      "transcript": "All developer accounts are provisioned with standard tier quotas upon creation. You may transmit up to 60 HTTP requests every 60 seconds. Daily usage is capped at 10,000 calls...",
+      "keywords": [
+        "rate limit",
+        "requests per minute",
+        "daily quota",
+        "standard tier"
+      ],
+      "possible_questions": [
+        "What is the request rate limit for standard API keys?",
+        "How many requests per day am I allowed to send?"
+      ]
+    },
+    {
+      "segment_index": 1,
+      "title": "Handling HTTP 429 and Retry-After Headers",
+      "summary": "Explains exponential backoff and inspecting the Retry-After response header when receiving HTTP 429 Too Many Requests.",
+      "transcript": "When your application exceeds configured rate limits, our gateway responds with HTTP status 429 (Too Many Requests). The response header contains Retry-After specifying wait time...",
+      "keywords": [
+        "HTTP 429",
+        "Too Many Requests",
+        "Retry-After",
+        "exponential backoff",
+        "throttling"
+      ],
+      "possible_questions": [
+        "What should my app do if it gets an HTTP 429 error?",
+        "How long do I need to wait after being rate limited?"
+      ]
+    }
+  ]
+}

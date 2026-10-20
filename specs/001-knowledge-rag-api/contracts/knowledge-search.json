@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgeSearchRequest",
+  "type": "object",
+  "required": ["question"],
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Natural language question to search across indexed knowledge"
+    },
+    "top_k": {
+      "type": "integer",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 50,
+      "description": "Maximum number of ranked segments to return"
+    },
+    "threshold": {
+      "type": "number",
+      "default": 0.30,
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Minimum similarity score required to include a segment in results"
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": { "type": "number" },
+      "description": "Optional mapping of metadata type name to positive numeric weight"
+    }
+  }
+}

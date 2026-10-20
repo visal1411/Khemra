@@ -1,0 +1,75 @@
+{
+  "title": "Corporate Code of Conduct and Compliance Handbook",
+  "description": "Annual compliance document covering ethical behavior, anti-bribery regulations, and whistleblower protections.",
+  "source_type": "pdf",
+  "sources": [
+    {
+      "language": "en",
+      "file_data": "JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=",
+      "page_count": 24
+    },
+    {
+      "language": "km",
+      "file_data": "JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=",
+      "page_count": 26
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 0,
+      "title": "Equal Opportunity & Anti-Harassment Policy",
+      "summary": "Mandates a respectful work environment prohibiting harassment, discrimination, or retaliation based on gender, race, or religion.",
+      "transcript": "Chapter 1: Workplace Respect. Our company is committed to maintaining a diverse, safe, and inclusive work culture. All employees are strictly entitled to work free from harassment...",
+      "page_start": 1,
+      "page_end": 4,
+      "keywords": [
+        "harassment",
+        "discrimination",
+        "diversity",
+        "workplace respect",
+        "equal opportunity"
+      ],
+      "possible_questions": [
+        "What is the company policy on workplace harassment?",
+        "How does the company handle discriminatory complaints?"
+      ]
+    },
+    {
+      "segment_index": 1,
+      "title": "Gift and Entertainment Policy",
+      "summary": "Sets monetary gift limits ($50 max) and reporting procedures to avoid conflicts of interest with vendors and clients.",
+      "transcript": "Chapter 2: Conflicts of Interest and Gifts. Employees may not accept gifts, hospitality, or entertainment valued above $50 from existing or prospective business partners...",
+      "page_start": 5,
+      "page_end": 8,
+      "keywords": [
+        "gifts",
+        "bribery",
+        "conflict of interest",
+        "vendor entertainment",
+        "compliance threshold"
+      ],
+      "possible_questions": [
+        "Can I accept a gift from a vendor or client?",
+        "What is the maximum allowed gift value before reporting?"
+      ]
+    },
+    {
+      "segment_index": 2,
+      "title": "Whistleblower Protection and Reporting Channels",
+      "summary": "Explains confidential reporting channels, anonymous hotlines, and non-retaliation guarantees for whistleblowers.",
+      "transcript": "Chapter 3: Speaking Up. If you suspect unethical or illegal behavior, you are protected under our non-retaliation policy. Reports can be submitted 24/7 anonymously...",
+      "page_start": 9,
+      "page_end": 14,
+      "keywords": [
+        "whistleblower",
+        "anonymous hotline",
+        "non-retaliation",
+        "ethics reporting"
+      ],
+      "possible_questions": [
+        "How can I report a compliance violation anonymously?",
+        "Am I protected from retaliation if I report misconduct?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgeUploadRequest",
+  "type": "object",
+  "required": ["title", "source_type"],
+  "anyOf": [
+    { "required": ["segments"] },
+    { "required": ["knowledge_segments"] }
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Title of the knowledge document or video"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional detailed description of the knowledge content"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["video", "pdf", "text"],
+      "description": "The type of source material"
+    },
+    "sources": {
+      "type": "array",
+      "description": "Optional list of source files or recordings",
+      "items": {
+        "type": "object",
+        "required": ["language"],
+        "properties": {
+          "language": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "en"
+          },
+          "file_data": {
+            "type": "string",
+            "description": "Base64 encoded binary bytes of the file"
+          },
+          "duration_seconds": {
+            "type": "number",
+            "example": 320.5
+          },
+          "page_count": {
+            "type": "integer",
+            "example": 15
+          }
+        }
+      }
+    },
+    "segments": {
+      "$ref": "#/$defs/KnowledgeSegmentList"
+    },
+    "knowledge_segments": {
+      "$ref": "#/$defs/KnowledgeSegmentList"
+    }
+  },
+  "$defs": {
+    "KnowledgeSegmentList": {
+      "type": "array",
+      "description": "Array of knowledge segments to ingest for this knowledge entity",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["segment_index"],
+        "properties": {
+          "segment_index": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Sequence index of segment within knowledge"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "transcript": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of keywords for this segment"
+          },
+          "possible_questions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of likely questions this segment answers"
+          },
+          "start_time_seconds": {
+            "type": "number"
+          },
+          "end_time_seconds": {
+            "type": "number"
+          },
+          "page_start": {
+            "type": "integer"
+          },
+          "page_end": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

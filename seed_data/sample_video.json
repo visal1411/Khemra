@@ -1,0 +1,74 @@
+{
+  "title": "Customer Onboarding & Account Setup Walkthrough",
+  "description": "Step-by-step video guide explaining user registration, profile setup, and two-factor authentication.",
+  "source_type": "video",
+  "sources": [
+    {
+      "language": "en",
+      "file_data": "AAAAHGZ0eXBtcDQyAAAAAG1wNDJpc29tYXZjMQ==",
+      "duration_seconds": 380.0
+    },
+    {
+      "language": "km",
+      "file_data": "AAAAHGZ0eXBtcDQyAAAAAG1wNDJpc29tYXZjMQ==",
+      "duration_seconds": 380.0
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 0,
+      "title": "Welcome & Account Creation Form",
+      "summary": "Walks through filling out the initial registration form with name, business email, and secure password.",
+      "transcript": "Hello and welcome. In this video, we will walk you through setting up your account. First, click on the Register button in the top right corner...",
+      "start_time_seconds": 0.0,
+      "end_time_seconds": 95.5,
+      "keywords": [
+        "registration",
+        "account sign up",
+        "create account",
+        "password requirements"
+      ],
+      "possible_questions": [
+        "How do I create a new account?",
+        "Where do I enter my business email to register?"
+      ]
+    },
+    {
+      "segment_index": 1,
+      "title": "Two-Factor Authentication Setup (2FA)",
+      "summary": "Demonstrates scanning the QR code using Google Authenticator and verifying the 6-digit confirmation code.",
+      "transcript": "Next, to keep your data secure, we require two-factor authentication. Open your authenticator app on your phone, scan this QR code on the screen...",
+      "start_time_seconds": 95.5,
+      "end_time_seconds": 230.0,
+      "keywords": [
+        "two-factor authentication",
+        "2FA",
+        "QR code",
+        "authenticator app",
+        "OTP"
+      ],
+      "possible_questions": [
+        "How do I set up two-factor authentication?",
+        "What app should I use to scan the 2FA QR code?"
+      ]
+    },
+    {
+      "segment_index": 2,
+      "title": "Company Profile & Team Invitations",
+      "summary": "Explains how to add company details, logo, and invite additional team members via email.",
+      "transcript": "Now that your account is protected, let's configure your workspace profile. Under organization settings, enter your company name and invite your colleagues...",
+      "start_time_seconds": 230.0,
+      "end_time_seconds": 380.0,
+      "keywords": [
+        "team invite",
+        "workspace profile",
+        "organization settings",
+        "members"
+      ],
+      "possible_questions": [
+        "How do I invite my coworkers to the workspace?",
+        "Where can I upload my company logo?"
+      ]
+    }
+  ]
+}

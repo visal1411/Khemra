@@ -1,0 +1,38 @@
+services:
+  web:
+    build: .
+    # migrate -> try to load seed JSON (never blocks startup) -> start server
+    command: >
+      sh -c "python manage.py migrate &&
+             (python manage.py load_segments seed_data/video_segments.json || echo 'Seed load skipped') &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      FASTEMBED_CACHE_DIR: /app/.cache/fastembed
+    volumes:
+      - .:/app
+      - model_cache:/app/.cache/fastembed
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: pgvector/pgvector:pg17      # postgres 17 WITH pgvector included
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mydatabase"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  postgres_data:
+  model_cache:

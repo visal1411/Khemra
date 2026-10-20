@@ -1,0 +1,86 @@
+{
+  "question": "How do I set up two-factor authentication?",
+  "language": "km",
+  "count": 2,
+  "weights_used": {
+    "questions": 0.40,
+    "summary": 0.30,
+    "title": 0.15,
+    "keywords": 0.15
+  },
+  "results": [
+    {
+      "segment_id": "4d1a3c7e-9081-4235-8651-789a1b2c3d4e",
+      "knowledge_id": "7b8e1f5c-890a-428e-8a21-432851910245",
+      "knowledge_title": "Customer Onboarding & Account Setup Walkthrough",
+      "source_type": "video",
+      "segment_index": 1,
+      "title": "Two-Factor Authentication Setup (2FA)",
+      "summary": "Demonstrates scanning the QR code using Google Authenticator and verifying the 6-digit confirmation code.",
+      "transcript": "Next, to keep your data secure, we require two-factor authentication. Open your authenticator app on your phone, scan this QR code on the screen...",
+      "start_time_seconds": 95.5,
+      "end_time_seconds": 230.0,
+      "page_start": null,
+      "page_end": null,
+      "keywords": [
+        "two-factor authentication",
+        "2FA",
+        "QR code",
+        "authenticator app",
+        "OTP"
+      ],
+      "score": 0.865,
+      "confidence": 86.5,
+      "best_match": "questions",
+      "confidence_by_type": {
+        "questions": 96.0,
+        "summary": 85.0,
+        "title": 78.5,
+        "keywords": 82.0
+      },
+      "matched_source": {
+        "id": "1a2b3c4d-5678-90ab-cdef-112233445566",
+        "language": "km",
+        "duration_seconds": 380.0,
+        "page_count": null,
+        "is_fallback": false
+      }
+    },
+    {
+      "segment_id": "2c3d4e5f-6789-01ab-cdef-223344556677",
+      "knowledge_id": "7b8e1f5c-890a-428e-8a21-432851910245",
+      "knowledge_title": "Customer Onboarding & Account Setup Walkthrough",
+      "source_type": "video",
+      "segment_index": 0,
+      "title": "Welcome & Account Creation Form",
+      "summary": "Walks through filling out the initial registration form with name, business email, and secure password.",
+      "transcript": "Hello and welcome. In this video, we will walk you through setting up your account. First, click on the Register button in the top right corner...",
+      "start_time_seconds": 0.0,
+      "end_time_seconds": 95.5,
+      "page_start": null,
+      "page_end": null,
+      "keywords": [
+        "registration",
+        "account sign up",
+        "create account",
+        "password requirements"
+      ],
+      "score": 0.724,
+      "confidence": 72.4,
+      "best_match": "keywords",
+      "confidence_by_type": {
+        "questions": 68.0,
+        "summary": 71.0,
+        "title": 65.0,
+        "keywords": 78.0
+      },
+      "matched_source": {
+        "id": "1a2b3c4d-5678-90ab-cdef-112233445566",
+        "language": "km",
+        "duration_seconds": 380.0,
+        "page_count": null,
+        "is_fallback": false
+      }
+    }
+  ]
+}

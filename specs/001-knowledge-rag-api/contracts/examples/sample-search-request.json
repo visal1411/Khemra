@@ -1,0 +1,12 @@
+{
+  "question": "How do I set up two-factor authentication?",
+  "language": "km",
+  "top_k": 3,
+  "threshold": 0.30,
+  "weights": {
+    "questions": 0.40,
+    "summary": 0.30,
+    "title": 0.15,
+    "keywords": 0.15
+  }
+}

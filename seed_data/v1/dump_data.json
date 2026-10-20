@@ -1,0 +1,142 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Wireless Noise-Canceling Headphones",
+      "description": "Premium over-ear headphones featuring active noise cancellation, high-fidelity sound drivers, 30-hour battery life, and crystal-clear voice microphones.",
+      "price": "199.99",
+      "stock_quantity": 45,
+      "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
+      "is_available": true,
+      "created_at": "2026-01-15T08:00:00Z",
+      "updated_at": "2026-01-15T08:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "RGB Mechanical Gaming Keyboard",
+      "description": "Tenkeyless mechanical keyboard with tactile red switches, per-key RGB backlighting, durable aluminum top plate, and detachable braided USB-C cable.",
+      "price": "89.50",
+      "stock_quantity": 60,
+      "image_url": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=800",
+      "is_available": true,
+      "created_at": "2026-01-16T09:30:00Z",
+      "updated_at": "2026-01-16T09:30:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Ergonomic Wireless Mouse",
+      "description": "Sculpted ergonomic vertical mouse designed to reduce wrist strain, featuring dual Bluetooth & 2.4GHz wireless connectivity with an ultra-quiet click mechanism.",
+      "price": "49.99",
+      "stock_quantity": 120,
+      "image_url": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800",
+      "is_available": true,
+      "created_at": "2026-01-18T11:15:00Z",
+      "updated_at": "2026-01-18T11:15:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "34-Inch Ultra-Wide Curved Monitor",
+      "description": "WQHD 3440x1440 curved IPS display with 144Hz refresh rate, 1ms response time, HDR400 support, and integrated USB-C 90W power delivery hub.",
+      "price": "549.00",
+      "stock_quantity": 18,
+      "image_url": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800",
+      "is_available": true,
+      "created_at": "2026-01-20T14:00:00Z",
+      "updated_at": "2026-01-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "USB-C 8-in-1 Multiport Adapter",
+      "description": "Compact aluminum hub featuring 4K HDMI, 100W Power Delivery pass-through, Gigabit Ethernet, SD/TF card reader, and 3 high-speed USB 3.0 ports.",
+      "price": "39.99",
+      "stock_quantity": 85,
+      "image_url": "https://images.unsplash.com/photo-1625842268584-8f3296236761?w=800",
+      "is_available": true,
+      "created_at": "2026-01-22T10:45:00Z",
+      "updated_at": "2026-01-22T10:45:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "name": "4K Ultra HD Streaming Webcam",
+      "description": "Professional 4K streaming camera with AI-powered autofocus, dual noise-canceling stereo mics, privacy shutter, and built-in adjustable ring light.",
+      "price": "129.99",
+      "stock_quantity": 30,
+      "image_url": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800",
+      "is_available": true,
+      "created_at": "2026-01-25T16:20:00Z",
+      "updated_at": "2026-01-25T16:20:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "name": "Smart Fitness Smartwatch",
+      "description": "All-day activity and health tracking with AMOLED always-on display, heart rate and SpO2 monitoring, onboard GPS, and 50m water resistance.",
+      "price": "179.95",
+      "stock_quantity": 0,
+      "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
+      "is_available": false,
+      "created_at": "2026-01-28T09:00:00Z",
+      "updated_at": "2026-01-28T09:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "name": "Aluminum Ergonomic Laptop Stand",
+      "description": "Adjustable folding stand crafted from premium sandblasted aluminum alloy with silicone protective pads and heat dissipation ventilation slots.",
+      "price": "34.99",
+      "stock_quantity": 150,
+      "image_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800",
+      "is_available": true,
+      "created_at": "2026-02-01T12:00:00Z",
+      "updated_at": "2026-02-01T12:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Portable NVMe SSD 1TB",
+      "description": "Rugged pocket-sized solid state drive with read speeds up to 1050MB/s, USB 3.2 Gen 2 interface, drop-resistant silicone casing, and hardware encryption.",
+      "price": "109.99",
+      "stock_quantity": 40,
+      "image_url": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800",
+      "is_available": true,
+      "created_at": "2026-02-03T15:30:00Z",
+      "updated_at": "2026-02-03T15:30:00Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 10,
+    "fields": {
+      "name": "Studio Condenser USB Microphone",
+      "description": "Cardioid condenser microphone with 24-bit/192kHz recording sample rate, zero-latency headphone monitoring, tap-to-mute sensor, and boom arm stand.",
+      "price": "79.99",
+      "stock_quantity": 25,
+      "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800",
+      "is_available": true,
+      "created_at": "2026-02-05T13:45:00Z",
+      "updated_at": "2026-02-05T13:45:00Z"
+    }
+  }
+]

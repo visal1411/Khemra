@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KnowledgeDetailResponse",
+  "type": "object",
+  "required": ["id", "title", "source_type", "processing_status", "created_at", "updated_at"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": ["string", "null"]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["video", "pdf", "text"]
+    },
+    "processing_status": {
+      "type": "string",
+      "enum": ["pending", "processing", "completed", "failed"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "language": { "type": "string" },
+          "duration_seconds": { "type": ["number", "null"] },
+          "page_count": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "segment_index": { "type": "integer" },
+          "title": { "type": ["string", "null"] },
+          "summary": { "type": ["string", "null"] },
+          "transcript": { "type": ["string", "null"] },
+          "keywords": { "type": "array", "items": { "type": "string" } },
+          "possible_questions": { "type": "array", "items": { "type": "string" } },
+          "start_time_seconds": { "type": ["number", "null"] },
+          "end_time_seconds": { "type": ["number", "null"] },
+          "page_start": { "type": ["integer", "null"] },
+          "page_end": { "type": ["integer", "null"] }
+        }
+      }
+    }
+  }
+}
