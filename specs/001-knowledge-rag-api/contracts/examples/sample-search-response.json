@@ -3,10 +3,10 @@
   "language": "km",
   "count": 2,
   "weights_used": {
-    "questions": 0.40,
-    "summary": 0.30,
-    "title": 0.15,
-    "keywords": 0.15
+    "question": 0.35,
+    "summary": 0.25,
+    "topic": 0.20,
+    "keyword": 0.20
   },
   "results": [
     {
@@ -31,16 +31,17 @@
       ],
       "score": 0.865,
       "confidence": 86.5,
-      "best_match": "questions",
+      "best_match": "question",
       "confidence_by_type": {
-        "questions": 96.0,
+        "question": 96.0,
         "summary": 85.0,
-        "title": 78.5,
-        "keywords": 82.0
+        "topic": 78.5,
+        "keyword": 82.0
       },
       "matched_source": {
         "id": "1a2b3c4d-5678-90ab-cdef-112233445566",
         "language": "km",
+        "file_url": "https://example.com/videos/onboarding_km.mp4",
         "duration_seconds": 380.0,
         "page_count": null,
         "is_fallback": false
@@ -67,16 +68,17 @@
       ],
       "score": 0.724,
       "confidence": 72.4,
-      "best_match": "keywords",
+      "best_match": "keyword",
       "confidence_by_type": {
-        "questions": 68.0,
+        "question": 68.0,
         "summary": 71.0,
-        "title": 65.0,
-        "keywords": 78.0
+        "topic": 65.0,
+        "keyword": 78.0
       },
       "matched_source": {
         "id": "1a2b3c4d-5678-90ab-cdef-112233445566",
         "language": "km",
+        "file_url": "https://example.com/videos/onboarding_km.mp4",
         "duration_seconds": 380.0,
         "page_count": null,
         "is_fallback": false

@@ -1,86 +1,107 @@
-[
-  {
-    "segment_id": "SEG-000124-01",
-    "video_id": "VID-000124",
-    "time": "00:00 - 00:09",
-    "title": "Account Sign Up & Credentials",
-    "summary": "The user opens the application, taps the \"Sign Up\" button, and enters basic personal information including their Full Name, Phone Number, and a secure Password to initiate the registration process.",
-    "keywords": [
-      "sign up",
-      "account creation",
-      "full name",
-      "phone number",
-      "password",
-      "credentials",
-      "registration form"
-    ],
-    "possible_questions": [
-      "Where do I click to start signing up?",
-      "What details do I need to enter to create a new account?",
-      "Can I use my phone number as my username?"
-    ]
-  },
-  {
-    "segment_id": "SEG-000124-02",
-    "video_id": "VID-000124",
-    "time": "00:10 - 00:19",
-    "title": "SMS Verification & QR Backup",
-    "summary": "The user receives a 6-digit SMS verification code, enters it into the app, and confirms success. Following this, the user downloads and stores a security QR code for future account access.",
-    "keywords": [
-      "SMS verification",
-      "6-digit code",
-      "OTP",
-      "security QR code",
-      "download QR",
-      "two-factor authentication"
-    ],
-    "possible_questions": [
-      "How do I verify my phone number?",
-      "What is the 6-digit code for?",
-      "Why do I need to download a QR code?",
-      "What happens if I lose my QR code?"
-    ]
-  },
-  {
-    "segment_id": "SEG-000124-03",
-    "video_id": "VID-000124",
-    "time": "00:20 - 00:29",
-    "title": "Secure Login",
-    "summary": "The user views the login options and selects the QR code method. They scan the previously saved QR code using the app's camera viewfinder to successfully log in and access the main dashboard.",
-    "keywords": [
-      "login",
-      "sign in",
-      "QR scan",
-      "camera viewfinder",
-      "dashboard access",
-      "biometrics"
-    ],
-    "possible_questions": [
-      "How do I log in using the QR code?",
-      "Where is the camera scanner located?",
-      "What do I do after scanning the QR code?"
-    ]
-  },
-  {
-    "segment_id": "SEG-000124-04",
-    "video_id": "VID-000124",
-    "time": "00:30 - 00:39",
-    "title": "Business Registration & Store Setup",
-    "summary": "The user selects \"Register as Business Owner,\" fills in the required store details including Shop Name, Category, and Address, and submits the application to complete the setup.",
-    "keywords": [
-      "business owner",
-      "shop name",
-      "store category",
-      "address",
-      "business registration",
-      "profile setup",
-      "submit application"
-    ],
-    "possible_questions": [
-      "How do I register my shop?",
-      "What information is required for the business profile?",
-      "How do I select a category for my store?",
-      "Where do I enter my business address?"
-    ]
-  }
-]
+{
+  "title": "Account Sign Up & Merchant Store Setup Walkthrough",
+  "description": "Step-by-step video guide covering account registration, SMS OTP verification, QR login, and merchant store setup.",
+  "source_type": "video",
+  "sources": [
+    {
+      "language": "en",
+      "file_url": "https://example.com/videos/account_registration_en.mp4",
+      "duration_seconds": 40.0
+    },
+    {
+      "language": "km",
+      "file_url": "https://example.com/videos/account_registration_km.mp4",
+      "duration_seconds": 40.0
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 0,
+      "title": "Account Sign Up & Credentials",
+      "summary": "The user opens the application, taps the \"Sign Up\" button, and enters basic personal information including their Full Name, Phone Number, and a secure Password to initiate the registration process.",
+      "transcript": "The user opens the application, taps the Sign Up button, and enters basic personal information including their Full Name, Phone Number, and a secure Password to initiate the registration process.",
+      "start_time_seconds": 0.0,
+      "end_time_seconds": 9.0,
+      "keywords": [
+        "sign up",
+        "account creation",
+        "full name",
+        "phone number",
+        "password",
+        "credentials",
+        "registration form"
+      ],
+      "possible_questions": [
+        "Where do I click to start signing up?",
+        "What details do I need to enter to create a new account?",
+        "Can I use my phone number as my username?"
+      ]
+    },
+    {
+      "segment_index": 1,
+      "title": "SMS Verification & QR Backup",
+      "summary": "The user receives a 6-digit SMS verification code, enters it into the app, and confirms success. Following this, the user downloads and stores a security QR code for future account access.",
+      "transcript": "The user receives a 6-digit SMS verification code, enters it into the app, and confirms success. Following this, the user downloads and stores a security QR code for future account access.",
+      "start_time_seconds": 10.0,
+      "end_time_seconds": 19.0,
+      "keywords": [
+        "SMS verification",
+        "6-digit code",
+        "OTP",
+        "security QR code",
+        "download QR",
+        "two-factor authentication"
+      ],
+      "possible_questions": [
+        "How do I verify my phone number?",
+        "What is the 6-digit code for?",
+        "Why do I need to download a QR code?",
+        "What happens if I lose my QR code?"
+      ]
+    },
+    {
+      "segment_index": 2,
+      "title": "Secure Login",
+      "summary": "The user views the login options and selects the QR code method. They scan the previously saved QR code using the app's camera viewfinder to successfully log in and access the main dashboard.",
+      "transcript": "The user views the login options and selects the QR code method. They scan the previously saved QR code using the app's camera viewfinder to successfully log in and access the main dashboard.",
+      "start_time_seconds": 20.0,
+      "end_time_seconds": 29.0,
+      "keywords": [
+        "login",
+        "sign in",
+        "QR scan",
+        "camera viewfinder",
+        "dashboard access",
+        "biometrics"
+      ],
+      "possible_questions": [
+        "How do I log in using the QR code?",
+        "Where is the camera scanner located?",
+        "What do I do after scanning the QR code?"
+      ]
+    },
+    {
+      "segment_index": 3,
+      "title": "Business Registration & Store Setup",
+      "summary": "The user selects \"Register as Business Owner,\" fills in the required store details including Shop Name, Category, and Address, and submits the application to complete the setup.",
+      "transcript": "The user selects Register as Business Owner, fills in the required store details including Shop Name, Category, and Address, and submits the application to complete the setup.",
+      "start_time_seconds": 30.0,
+      "end_time_seconds": 39.0,
+      "keywords": [
+        "business owner",
+        "shop name",
+        "store category",
+        "address",
+        "business registration",
+        "profile setup",
+        "submit application"
+      ],
+      "possible_questions": [
+        "How do I register my shop?",
+        "What information is required for the business profile?",
+        "How do I select a category for my store?",
+        "Where do I enter my business address?"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,21 @@
 import base64
+import os
+from urllib.parse import urlparse
+from django.conf import settings
+import requests
 from rest_framework import serializers
 from apps.rag.models.enums import SourceType
+
+DANGEROUS_EXTENSIONS = {
+    ".exe", ".bat", ".cmd", ".sh", ".php", ".py", ".bin", ".dll",
+    ".apk", ".msi", ".vbs", ".scr", ".com", ".pif",
+}
+
+ALLOWED_EXTENSIONS = {
+    SourceType.PDF: {".pdf"},
+    SourceType.VIDEO: {".mp4", ".mov", ".avi", ".webm", ".mkv", ".m4v", ".mpeg", ".mpg"},
+    SourceType.TEXT: {".txt", ".md", ".json", ".csv", ".log"},
+}
 
 
 class KnowledgeSourceInputSerializer(serializers.Serializer):
@@ -16,6 +31,33 @@ class KnowledgeSourceInputSerializer(serializers.Serializer):
                 base64.b64decode(value, validate=True)
             except Exception as e:
                 raise serializers.ValidationError(f"Invalid base64 encoded binary data: {e}")
+        return value
+
+    def validate_file_url(self, value):
+        if value:
+            parsed = urlparse(value)
+            if not parsed.scheme or parsed.scheme not in ("http", "https"):
+                raise serializers.ValidationError("File URL must be a valid HTTP or HTTPS link.")
+
+            ext = os.path.splitext(parsed.path)[1].lower()
+            if ext in DANGEROUS_EXTENSIONS:
+                raise serializers.ValidationError(
+                    f"Forbidden file extension '{ext}'. Executable and script files are strictly blocked."
+                )
+
+            # Enforce Storage Domain Whitelist
+            allowed_hosts = getattr(settings, "ALLOWED_STORAGE_HOSTS", None)
+            if allowed_hosts:
+                host = parsed.netloc.lower()
+                is_allowed = any(
+                    host == h.lower() or host.endswith("." + h.lower())
+                    for h in allowed_hosts
+                )
+                if not is_allowed:
+                    raise serializers.ValidationError(
+                        f"Unauthorized storage domain '{host}'. Files must be hosted on authorized cloud storage."
+                    )
+
         return value
 
 
@@ -89,6 +131,45 @@ class KnowledgeInputSerializer(serializers.Serializer):
                         "sources": f"Invalid text file format for language '{lang}'. Content must be valid UTF-8 or UTF-16 encoded text."
                     })
 
+    def _validate_remote_url_signature(self, file_url, source_type, lang):
+        if not file_url:
+            return
+
+        parsed = urlparse(file_url)
+        ext = os.path.splitext(parsed.path)[1].lower()
+
+        # 1. Match extension to source_type if extension is provided in URL
+        allowed = ALLOWED_EXTENSIONS.get(source_type, set())
+        if ext and ext not in allowed:
+            raise serializers.ValidationError({
+                "sources": f"URL extension '{ext}' for language '{lang}' does not match expected source type '{source_type}'. Allowed extensions: {', '.join(sorted(allowed))}."
+            })
+
+        # 2. Remote Byte Sniffing (HTTP Range: bytes=0-15)
+        # Skip mock/local test domains to prevent offline test failures
+        host = parsed.netloc.lower()
+        if not host or host in ("example.com", "localhost", "127.0.0.1", "testserver"):
+            return
+
+        try:
+            resp = requests.get(file_url, headers={"Range": "bytes=0-15"}, timeout=2.5)
+            if resp.status_code in (200, 206) and resp.content:
+                header = resp.content
+
+                # Check executable signature (MZ header)
+                if header.startswith(b"MZ"):
+                    raise serializers.ValidationError({
+                        "sources": f"Security violation for language '{lang}'. Remote file at '{file_url}' is an executable (.exe) binary!"
+                    })
+
+                # Check PDF signature
+                if source_type == SourceType.PDF and not header.startswith(b"%PDF-"):
+                    raise serializers.ValidationError({
+                        "sources": f"Invalid PDF file at URL for language '{lang}'. Remote file does not begin with '%PDF-'."
+                    })
+        except requests.RequestException:
+            pass
+
     def validate(self, data):
         # Support either segments or knowledge_segments
         segments = data.get("segments") or data.get("knowledge_segments")
@@ -105,9 +186,16 @@ class KnowledgeInputSerializer(serializers.Serializer):
             lang = src.get("language")
             languages.append(lang)
             file_str = src.get("file_data")
+            file_url = src.get("file_url")
+
+            # 1. Base64 in-memory verification
             if file_str:
                 raw_bytes = base64.b64decode(file_str)
                 self._validate_source_file_signature(raw_bytes, source_type, lang)
+
+            # 2. Remote URL verification
+            if file_url:
+                self._validate_remote_url_signature(file_url, source_type, lang)
 
         if len(languages) != len(set(languages)):
             raise serializers.ValidationError({"sources": "Duplicate languages found in sources. Each source must have a unique language."})

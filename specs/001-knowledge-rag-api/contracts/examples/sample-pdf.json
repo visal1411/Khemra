@@ -5,12 +5,12 @@
   "sources": [
     {
       "language": "en",
-      "file_data": "JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=",
+      "file_url": "https://example.com/documents/compliance_handbook_en.pdf",
       "page_count": 24
     },
     {
       "language": "km",
-      "file_data": "JVBERi0xLjQKJcTl8uXrp/Og0MTGCjQgMCBvYmo=",
+      "file_url": "https://example.com/documents/compliance_handbook_km.pdf",
       "page_count": 26
     }
   ],

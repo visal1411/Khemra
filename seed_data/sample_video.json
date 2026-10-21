@@ -5,12 +5,12 @@
   "sources": [
     {
       "language": "en",
-      "file_data": "AAAAHGZ0eXBtcDQyAAAAAG1wNDJpc29tYXZjMQ==",
+      "file_url": "https://example.com/videos/onboarding_en.mp4",
       "duration_seconds": 380.0
     },
     {
       "language": "km",
-      "file_data": "AAAAHGZ0eXBtcDQyAAAAAG1wNDJpc29tYXZjMQ==",
+      "file_url": "https://example.com/videos/onboarding_km.mp4",
       "duration_seconds": 380.0
     }
   ],

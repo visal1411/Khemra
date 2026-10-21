@@ -33,8 +33,7 @@ model_cache/
 .DS_Store
 Thumbs.db
 
-# Markdown documentation
-*.md
+
 
 # Media & Video files
 *.mp4

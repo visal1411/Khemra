@@ -55,8 +55,8 @@ class KnowledgeSearchServiceTest(TestCase):
         top = res["results"][0]
         self.assertEqual(top["segment_index"], 1)
         self.assertEqual(top["title"], "Two-Factor Auth")
-        self.assertEqual(top["best_match"], "questions")
-        self.assertIn("questions", top["confidence_by_type"])
+        self.assertEqual(top["best_match"], "question")
+        self.assertIn("question", top["confidence_by_type"])
 
     def test_multi_language_source_matching(self):
         # Query with Khmer language requested
@@ -87,3 +87,30 @@ class KnowledgeSearchServiceTest(TestCase):
         )
         self.assertEqual(res["count"], 0)
         self.assertEqual(res["results"], [])
+
+    def test_search_deduplicates_identical_segments(self):
+        # Ingest the exact same knowledge payload again
+        self.ingest_service.ingest({
+            "title": "User Account Management",
+            "source_type": "video",
+            "sources": [{"language": "en", "file_url": "https://example.com/v_en.mp4"}],
+            "segments": [
+                {
+                    "segment_index": 0,
+                    "title": "Account Registration",
+                    "summary": "Fill out email and password to sign up.",
+                    "keywords": ["register", "sign up"],
+                    "possible_questions": ["How do I register an account?"],
+                },
+            ],
+        })
+
+        res = self.search_service.search(
+            question="How do I register an account?",
+            threshold=0.0,
+            top_k=5,
+        )
+        # Even though segment 0 was ingested twice across 2 knowledge entities,
+        # it should only appear once in search results
+        registered_segments = [r for r in res["results"] if r["title"] == "Account Registration"]
+        self.assertEqual(len(registered_segments), 1)

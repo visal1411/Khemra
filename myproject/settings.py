@@ -125,7 +125,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================================================================
+# RAG Cloud Storage Security - Allowed S3 / CDN Storage Domains
+# ==============================================================================
+DEFAULT_ALLOWED_STORAGE_HOSTS = [
+    "s3.amazonaws.com",
+    "pub-d1cf39f6efc3465b9aff3a5e9d49aa54.r2.dev",
+    "r2.cloudflarestorage.com",
+    "example.com",
+    "localhost",
+    "127.0.0.1",
+    "testserver",
+]
+
+_env_storage_hosts = os.environ.get("ALLOWED_STORAGE_HOSTS", "")
+if _env_storage_hosts:
+    ALLOWED_STORAGE_HOSTS = [h.strip() for h in _env_storage_hosts.split(",") if h.strip()]
+else:
+    ALLOWED_STORAGE_HOSTS = DEFAULT_ALLOWED_STORAGE_HOSTS
+

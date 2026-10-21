@@ -5,11 +5,11 @@
   "sources": [
     {
       "language": "en",
-      "file_data": "IyBBUEkgUmF0ZSBMaW1pdGluZyBhbmQgUXVvdGEgR3VpZGVsaW5lcy4uLg=="
+      "file_url": "https://example.com/docs/rate-limits_en.txt"
     },
     {
       "language": "km",
-      "file_data": "IyDgpYjgpYngpYsg4KWL4KWn4KWh4KWI4KWJ...=="
+      "file_url": "https://example.com/docs/rate-limits_km.txt"
     }
   ],
   "segments": [

@@ -5,7 +5,7 @@ class KnowledgeSearchRequestSerializer(serializers.Serializer):
     question = serializers.CharField(required=True, min_length=1)
     language = serializers.CharField(required=False, default="en", max_length=10)
     top_k = serializers.IntegerField(required=False, default=3, min_value=1, max_value=50)
-    threshold = serializers.FloatField(required=False, default=0.30, min_value=0.0, max_value=1.0)
+    threshold = serializers.FloatField(required=False, default=0.10, min_value=0.0, max_value=1.0)
     weights = serializers.DictField(
         child=serializers.FloatField(min_value=0.0),
         required=False,

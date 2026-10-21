@@ -31,7 +31,6 @@ class KnowledgeSearchService:
         scores = [combiner.combine(seg_id, sims) for seg_id, sims in per_segment.items()]
         scores = [s for s in scores if s.score >= threshold]
         scores.sort(key=lambda s: s.score, reverse=True)
-        scores = scores[:top_k]
 
         if not scores:
             return {
@@ -42,8 +41,10 @@ class KnowledgeSearchService:
                 "results": [],
             }
 
-        # 3. Bulk fetch segments with parent knowledge and sources
-        target_ids = [s.segment_id for s in scores]
+        # 3. Bulk fetch candidate segments (fetch extra candidates to allow room for deduplication)
+        candidate_pool_size = max(top_k * 5, 25)
+        candidate_scores = scores[:candidate_pool_size]
+        target_ids = [s.segment_id for s in candidate_scores]
         segments = (
             KnowledgeSegment.objects.filter(id__in=target_ids)
             .select_related("knowledge")
@@ -51,14 +52,36 @@ class KnowledgeSearchService:
         )
         seg_map = {str(seg.id): seg for seg in segments}
 
-        # 4. Resolve multi-language sources and assemble results
+        # 4. Resolve multi-language sources and assemble deduplicated results
         results = []
-        for s in scores:
+        seen_segments = set()
+
+        for s in candidate_scores:
             seg = seg_map.get(s.segment_id)
             if not seg:
                 continue
 
             knowledge = seg.knowledge
+
+            # Deduplication key:
+            # 1. Same knowledge title + segment index (re-uploaded document)
+            # 2. Same segment title + content snippet (identical text chunk across documents)
+            k_title = (knowledge.title or "").strip().lower()
+            s_title = (seg.title or "").strip().lower()
+            content_snippet = (seg.summary or seg.transcript or "")[:120].strip().lower()
+
+            dedup_key_index = (k_title, seg.segment_index)
+            dedup_key_content = (s_title, content_snippet) if (s_title and content_snippet) else None
+
+            if dedup_key_index in seen_segments:
+                continue
+            if dedup_key_content and dedup_key_content in seen_segments:
+                continue
+
+            seen_segments.add(dedup_key_index)
+            if dedup_key_content:
+                seen_segments.add(dedup_key_content)
+
             sources = list(knowledge.sources.all())
 
             matched_source = None
@@ -106,6 +129,9 @@ class KnowledgeSearchService:
                 "confidence_by_type": s.confidence_by_type,
                 "matched_source": matched_source,
             })
+
+            if len(results) >= top_k:
+                break
 
         return {
             "question": question,
