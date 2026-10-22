@@ -15,11 +15,286 @@
       "key": "knowledge_id",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "upload_url",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "file_url",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "file_type",
+      "value": "application/pdf",
+      "type": "string"
     }
   ],
   "item": [
     {
+      "name": "0. Cloudflare R2 Presigned Direct Upload",
+      "item": [
+        {
+          "name": "Step 1: Get Presigned Upload URL (PDF)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.upload_url && json.file_url) {",
+                  "        pm.collectionVariables.set('upload_url', json.upload_url);",
+                  "        pm.collectionVariables.set('file_url', json.file_url);",
+                  "        var reqType = pm.request.url.query.get('file_type') || 'application/pdf';",
+                  "        pm.collectionVariables.set('file_type', reqType);",
+                  "        console.log('Saved upload_url:', json.upload_url);",
+                  "        console.log('Saved file_url:', json.file_url);",
+                  "        console.log('Saved file_type:', reqType);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rag/storage/presigned-url/?filename=handbook.pdf&file_type=application/pdf&folder=documents",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "storage", "presigned-url", ""],
+              "query": [
+                {
+                  "key": "filename",
+                  "value": "handbook.pdf",
+                  "description": "Original file name with extension"
+                },
+                {
+                  "key": "file_type",
+                  "value": "application/pdf",
+                  "description": "Exact MIME type for Content-Type matching"
+                },
+                {
+                  "key": "folder",
+                  "value": "documents",
+                  "description": "Bucket folder prefix (optional, default: documents)"
+                }
+              ]
+            },
+            "description": "Requests a temporary cryptographically signed HTTP PUT upload URL from Cloudflare R2 via Django. Saves upload_url, file_url, and file_type into Postman collection variables automatically."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 1b: Get Presigned Upload URL (Video)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.upload_url && json.file_url) {",
+                  "        pm.collectionVariables.set('upload_url', json.upload_url);",
+                  "        pm.collectionVariables.set('file_url', json.file_url);",
+                  "        var reqType = pm.request.url.query.get('file_type') || 'video/mp4';",
+                  "        pm.collectionVariables.set('file_type', reqType);",
+                  "        console.log('Saved video upload_url & file_url');",
+                  "        console.log('Saved video file_type:', reqType);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rag/storage/presigned-url/?filename=onboarding.mp4&file_type=video/mp4&folder=videos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "storage", "presigned-url", ""],
+              "query": [
+                {
+                  "key": "filename",
+                  "value": "onboarding.mp4"
+                },
+                {
+                  "key": "file_type",
+                  "value": "video/mp4"
+                },
+                {
+                  "key": "folder",
+                  "value": "videos"
+                }
+              ]
+            },
+            "description": "Requests a presigned upload URL for a video file (.mp4). Automatically saves video file_type into variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 2: Upload Binary Directly to Cloudflare R2 (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{file_type}}",
+                "description": "Automatically populated from Step 1 file_type"
+              }
+            ],
+            "body": {
+              "mode": "file",
+              "file": {
+                "src": ""
+              }
+            },
+            "url": {
+              "raw": "{{upload_url}}",
+              "host": ["{{upload_url}}"]
+            },
+            "description": "Directly uploads raw binary file to Cloudflare R2 using the temporary signed URL from Step 1. In Postman Body tab, select a sample file before sending."
+          },
+          "response": []
+        },
+        {
+          "name": "Step 3: Ingest Knowledge with Presigned file_url (POST)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.id) {",
+                  "        pm.collectionVariables.set('knowledge_id', json.id);",
+                  "        console.log('Saved knowledge_id:', json.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cloud Architecture Handbook\",\n  \"description\": \"Comprehensive guide uploaded via presigned URL.\",\n  \"source_type\": \"pdf\",\n  \"sources\": [\n    {\n      \"language\": \"en\",\n      \"file_url\": \"{{file_url}}\",\n      \"page_count\": 5\n    }\n  ],\n  \"segments\": [\n    {\n      \"segment_index\": 0,\n      \"title\": \"Introduction to Cloud Systems\",\n      \"summary\": \"Overview of distributed architecture and zero-egress storage.\",\n      \"transcript\": \"Welcome to cloud storage architectures with Cloudflare R2 and Django.\",\n      \"keywords\": [\"cloud\", \"architecture\", \"r2\"],\n      \"possible_questions\": [\"What is Cloudflare R2?\", \"How does direct upload work?\"],\n      \"page_start\": 1,\n      \"page_end\": 5\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", ""]
+            },
+            "description": "Calls the Knowledge Ingestion API using the dynamically captured {{file_url}} from Step 1. Automatically saves knowledge_id into variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Security Test: Dangerous Executable Blocked (.exe)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 400 Bad Request', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Error message mentions forbidden extension', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.error).to.include('Forbidden file extension');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rag/storage/presigned-url/?filename=malware.exe&file_type=application/x-msdownload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "storage", "presigned-url", ""],
+              "query": [
+                {
+                  "key": "filename",
+                  "value": "malware.exe"
+                },
+                {
+                  "key": "file_type",
+                  "value": "application/x-msdownload"
+                }
+              ]
+            },
+            "description": "Verifies that the backend blocks executable files (.exe, .sh, .bat) before issuing any upload URL."
+          },
+          "response": []
+        },
+        {
+          "name": "Security Test: Empty File Blocked (0 bytes)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 400 Bad Request', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Error message mentions file size', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.error).to.include('File size must be greater than 0 bytes');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rag/storage/presigned-url/?filename=empty.pdf&file_type=application/pdf&file_size=0",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "storage", "presigned-url", ""],
+              "query": [
+                {
+                  "key": "filename",
+                  "value": "empty.pdf"
+                },
+                {
+                  "key": "file_type",
+                  "value": "application/pdf"
+                },
+                {
+                  "key": "file_size",
+                  "value": "0",
+                  "description": "Zero bytes payload rejection test"
+                }
+              ]
+            },
+            "description": "Verifies that the backend blocks 0-byte empty files before generating any presigned upload URL."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "1. Knowledge Ingestion (Upload)",
+
       "item": [
         {
           "name": "Upload Knowledge - Video (Cloud URL - Recommended)",

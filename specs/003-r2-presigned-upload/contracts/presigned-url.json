@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PresignedUploadResponse",
+  "description": "Response schema for GET /api/rag/storage/presigned-url/",
+  "type": "object",
+  "required": [
+    "upload_url",
+    "file_url",
+    "key",
+    "expires_in"
+  ],
+  "properties": {
+    "upload_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Temporary signed URL for uploading raw binary to R2 via HTTP PUT"
+    },
+    "file_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Permanent public read URL to provide in Knowledge ingestion"
+    },
+    "key": {
+      "type": "string",
+      "description": "The unique object key in the R2 bucket"
+    },
+    "expires_in": {
+      "type": "integer",
+      "description": "Validity period in seconds",
+      "default": 600
+    }
+  }
+}

@@ -2,6 +2,8 @@ services:
   web:
     build: .
     # migrate -> seed metadata types -> start server
+    env_file:             # <--- ADD THESE TWO LINES
+      - .env   
     command: >
       sh -c "python manage.py migrate &&
              python manage.py seed_metadata_types &&

@@ -101,8 +101,10 @@ class KnowledgeInputSerializer(serializers.Serializer):
         return value.strip()
 
     def _validate_source_file_signature(self, raw_bytes, source_type, lang):
-        if not raw_bytes:
-            return
+        if not raw_bytes or len(raw_bytes) == 0:
+            raise serializers.ValidationError({
+                "sources": f"File content for language '{lang}' cannot be empty (0 bytes)."
+            })
 
         if source_type == SourceType.PDF:
             if not raw_bytes.startswith(b"%PDF-"):
@@ -153,8 +155,13 @@ class KnowledgeInputSerializer(serializers.Serializer):
 
         try:
             resp = requests.get(file_url, headers={"Range": "bytes=0-15"}, timeout=2.5)
-            if resp.status_code in (200, 206) and resp.content:
-                header = resp.content
+            if resp.status_code in (200, 206):
+                header = resp.content or b""
+                # Reject empty files (0 bytes)
+                if len(header) == 0 or resp.headers.get("Content-Length") == "0":
+                    raise serializers.ValidationError({
+                        "sources": f"Remote file at '{file_url}' for language '{lang}' is empty (0 bytes). Uploaded files must not be empty."
+                    })
 
                 # Check executable signature (MZ header)
                 if header.startswith(b"MZ"):

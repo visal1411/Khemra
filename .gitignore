@@ -9,6 +9,8 @@ __pycache__/
 
 # Environments
 .env
+.env*
+.env.*
 .venv
 env/
 venv/
@@ -42,3 +44,10 @@ Thumbs.db
 *.mkv
 *.webm
 video_base64.txt
+
+# Documents
+*.doc
+*.docx
+BACKEND_DOCUMENTATION.md
+PRESIGNED_UPLOAD_SUMMARY.md
+presign.md

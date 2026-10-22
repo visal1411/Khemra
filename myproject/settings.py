@@ -16,6 +16,16 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file if it exists
+_env_path = BASE_DIR / '.env'
+if _env_path.exists():
+    with open(_env_path, 'r', encoding='utf-8') as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith('#') and '=' in _line:
+                _k, _v = _line.split('=', 1)
+                os.environ.setdefault(_k.strip(), _v.strip().strip("'\""))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -145,4 +155,15 @@ if _env_storage_hosts:
     ALLOWED_STORAGE_HOSTS = [h.strip() for h in _env_storage_hosts.split(",") if h.strip()]
 else:
     ALLOWED_STORAGE_HOSTS = DEFAULT_ALLOWED_STORAGE_HOSTS
-
+# ==============================================================================
+# Cloudflare R2 / S3 Storage Configuration
+# ==============================================================================
+R2_ACCOUNT_ID = os.environ.get("R2_ACCOUNT_ID", "")
+R2_ACCESS_KEY_ID = os.environ.get("R2_ACCESS_KEY_ID", "")
+R2_SECRET_ACCESS_KEY = os.environ.get("R2_SECRET_ACCESS_KEY", "")
+R2_BUCKET_NAME = os.environ.get("R2_BUCKET_NAME", "my-khemra-bucket")
+R2_PUBLIC_DOMAIN = os.environ.get("R2_PUBLIC_DOMAIN", "pub-d1cf39f6efc3465b9aff3a5e9d49aa54.r2.dev")
+R2_ENDPOINT_URL = os.environ.get(
+    "R2_ENDPOINT_URL",
+    f"https://{R2_ACCOUNT_ID}.r2.cloudflarestorage.com" if R2_ACCOUNT_ID else "",
+)
