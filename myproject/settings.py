@@ -167,3 +167,11 @@ R2_ENDPOINT_URL = os.environ.get(
     "R2_ENDPOINT_URL",
     f"https://{R2_ACCOUNT_ID}.r2.cloudflarestorage.com" if R2_ACCOUNT_ID else "",
 )
+
+# ==============================================================================
+# LLM / Groq Configuration (AI Overview & Grounded Steps)
+# ==============================================================================
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "groq")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
+GROQ_API_BASE = os.environ.get("GROQ_API_BASE", "https://api.groq.com/openai/v1")

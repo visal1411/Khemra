@@ -1,5 +1,7 @@
 # Frontend Integration Guide — Knowledge RAG API
 
+> **Notice:** A complete, comprehensive technical reference with full TypeScript client code, Cloudflare R2 upload progress tracking, and AI Overview video timestamp scrubbing is available in **[`FRONTEND_INTEGRATION_GUIDE.md`](file:///d:/Khemra%20Backend/my-django-dockerv2/FRONTEND_INTEGRATION_GUIDE.md)**.
+
 Welcome! This guide contains everything the frontend team (Web, Mobile, Flutter, React) needs to integrate with the Knowledge RAG backend.
 
 ---

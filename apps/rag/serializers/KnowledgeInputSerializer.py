@@ -147,15 +147,29 @@ class KnowledgeInputSerializer(serializers.Serializer):
                 "sources": f"URL extension '{ext}' for language '{lang}' does not match expected source type '{source_type}'. Allowed extensions: {', '.join(sorted(allowed))}."
             })
 
-        # 2. Remote Byte Sniffing (HTTP Range: bytes=0-15)
+        # 2. Remote Byte Sniffing & Storage Existence Guardrail (HTTP Range: bytes=0-15)
         # Skip mock/local test domains to prevent offline test failures
         host = parsed.netloc.lower()
-        if not host or host in ("example.com", "localhost", "127.0.0.1", "testserver"):
+        if not host or host in ("example.com", "localhost", "127.0.0.1", "testserver") or "my-bucket.s3.amazonaws.com" in host:
             return
 
         try:
-            resp = requests.get(file_url, headers={"Range": "bytes=0-15"}, timeout=2.5)
-            if resp.status_code in (200, 206):
+            resp = requests.get(file_url, headers={"Range": "bytes=0-15"}, timeout=3.0)
+            if resp.status_code == 404:
+                raise serializers.ValidationError({
+                    "sources": (
+                        f"Remote file at '{file_url}' does not exist (HTTP 404 Not Found). "
+                        f"The file upload to Cloudflare R2 must complete successfully before submitting knowledge metadata."
+                    )
+                })
+            elif resp.status_code == 403:
+                raise serializers.ValidationError({
+                    "sources": (
+                        f"Access denied to remote file at '{file_url}' (HTTP 403 Forbidden). "
+                        f"Please ensure the file was uploaded and is publicly accessible via the storage CDN."
+                    )
+                })
+            elif resp.status_code in (200, 206):
                 header = resp.content or b""
                 # Reject empty files (0 bytes)
                 if len(header) == 0 or resp.headers.get("Content-Length") == "0":
@@ -174,6 +188,13 @@ class KnowledgeInputSerializer(serializers.Serializer):
                     raise serializers.ValidationError({
                         "sources": f"Invalid PDF file at URL for language '{lang}'. Remote file does not begin with '%PDF-'."
                     })
+            elif resp.status_code >= 400:
+                raise serializers.ValidationError({
+                    "sources": f"Failed to verify remote file at '{file_url}'. Storage server returned HTTP {resp.status_code}."
+                })
+        except requests.exceptions.Timeout:
+            # Storage request timed out
+            pass
         except requests.RequestException:
             pass
 

@@ -539,7 +539,144 @@
       ]
     },
     {
-      "name": "3. Knowledge Detail",
+      "name": "3. AI Overview & Step Search (Google Style)",
+      "item": [
+        {
+          "name": "AI Overview - Video Instructions (How to use Slack & IT Support)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "pm.test('Response contains summary and steps', function () {",
+                  "    pm.expect(json).to.have.property('summary');",
+                  "    pm.expect(json).to.have.property('steps');",
+                  "    pm.expect(json).to.have.property('results');",
+                  "});",
+                  "if (json.summary) {",
+                  "    console.log('--- AI SUMMARY ---');",
+                  "    console.log(json.summary);",
+                  "}",
+                  "if (json.steps && json.steps.length > 0) {",
+                  "    console.log('--- SYNTHESIZED STEPS ---');",
+                  "    json.steps.forEach(function(s) {",
+                  "        console.log('Step ' + s.step_number + ': ' + s.title + ' -> ' + s.instruction + ' (Segment ID: ' + s.segment_id + ')');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"How do I use Slack to talk to IT support?\",\n  \"language\": \"en\",\n  \"top_k\": 3,\n  \"threshold\": 0.20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/ai-overview/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", "ai-overview", ""]
+            },
+            "description": "Performs vector search across video segments, synthesizes a revised natural summary and ordered steps linked to segment_ids using the LLM (OpenAI GPT-OSS 120B on Groq), and returns unchanged video segment results with timestamps and file_url."
+          },
+          "response": []
+        },
+        {
+          "name": "AI Overview - Khmer Language Search (ភាសាខ្មែរ)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "pm.test('Response language matches km', function () {",
+                  "    pm.expect(json.language).to.eql('km');",
+                  "});",
+                  "if (json.summary) {",
+                  "    console.log('--- KHMER AI SUMMARY ---');",
+                  "    console.log(json.summary);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"តើខ្ញុំអាចទាក់ទងផ្នែក IT Support តាមរបៀបណា?\",\n  \"language\": \"km\",\n  \"top_k\": 3,\n  \"threshold\": 0.20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/ai-overview/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", "ai-overview", ""]
+            },
+            "description": "Performs semantic search with target language 'km'. The LLM outputs the revised overview and action steps in Khmer, with matched_source resolving to the Khmer video."
+          },
+          "response": []
+        },
+        {
+          "name": "AI Overview - Policy & PDF Search (Gifts & Reporting)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"Can I accept a gift or dinner from a vendor?\",\n  \"language\": \"en\",\n  \"top_k\": 3,\n  \"threshold\": 0.20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rag/knowledge/search/ai-overview/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "rag", "knowledge", "search", "ai-overview", ""]
+            },
+            "description": "Searches PDF handbook segments and provides procedural steps for gift declaration and compliance limits."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Knowledge Detail",
       "item": [
         {
           "name": "Get Knowledge Detail by ID",
@@ -558,7 +695,7 @@
       ]
     },
     {
-      "name": "4. Catalog API (Legacy)",
+      "name": "5. Catalog API (Legacy)",
       "item": [
         {
           "name": "Get Products List",

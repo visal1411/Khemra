@@ -11,7 +11,7 @@ This document details all security checks, business rules, and input validations
    - [Layer 2: Segment Business Logic](#layer-2-segment-business-logic)
    - [Layer 3: URL Protocol & Domain Whitelist](#layer-3-url-protocol--domain-whitelist)
    - [Layer 4: Extension & Dangerous File Blocking](#layer-4-extension--dangerous-file-blocking)
-   - [Layer 5: Remote Magic Byte Sniffing (HTTP Range)](#layer-5-remote-magic-byte-sniffing-http-range)
+   - [Layer 5: Remote Storage Existence (404/403 Guardrail) & Magic Byte Sniffing](#layer-5-remote-storage-existence-404403-guardrail--magic-byte-sniffing)
 3. [Error Response Catalog](#3-error-response-catalog)
 4. [Step-by-Step Testing Guide](#4-step-by-step-testing-guide)
    - [Option A: Automated Docker Test Suite](#option-a-automated-docker-test-suite)
@@ -31,14 +31,15 @@ This document details all security checks, business rules, and input validations
          │
          │ 1. Picks file via UI file picker
          ▼
-[ Cloud Storage (AWS S3) ] ──▶ 2. File stored securely in S3
+[ Cloud Storage (R2 / S3) ] ──▶ 2. File stored securely via PUT upload_url
          │
-         │ 3. S3 returns URL: "https://my-bucket.s3.amazonaws.com/doc.pdf"
+         │ 3. CDN returns public URL: "https://pub-...r2.dev/video.mp4"
          ▼
 [ Django Backend ] ──────────▶ 4. Receives POST /api/rag/knowledge/ with URL
-                                  • Verifies S3 domain whitelist
-                                  • Verifies file extension
-                                  • Sniffs first 16 bytes over network
+                                  • Verifies storage domain whitelist
+                                  • Verifies file extension compatibility
+                                  • Verifies file EXISTS in R2 (HTTP 200/206 vs 404/403)
+                                  • Sniffs first 16 bytes (blocks malware & 0 bytes)
                                   • Saves to DB & creates vector embeddings
 ```
 
@@ -73,7 +74,7 @@ This document details all security checks, business rules, and input validations
   * URLs must begin with `http://` or `https://`.
   * Blocks dangerous URI schemes like `ftp://`, `file://`, or `javascript:`.
 * **Storage Origin Whitelist (`ALLOWED_STORAGE_HOSTS`):**
-  * Verifies that the URL host matches the authorized S3 bucket domain configured in `settings.py` (e.g., `s3.amazonaws.com` or your bucket name).
+  * Verifies that the URL host matches authorized cloud domains configured in `settings.py` (e.g., `pub-d1cf39f6efc3465b9aff3a5e9d49aa54.r2.dev`, `r2.cloudflarestorage.com`, `s3.amazonaws.com`).
   * Rejects random external links from unapproved websites.
 
 ---
@@ -90,12 +91,15 @@ This document details all security checks, business rules, and input validations
 
 ---
 
-### Layer 5: Remote Magic Byte Sniffing (HTTP Range)
+### Layer 5: Remote Storage Existence (404/403 Guardrail) & Magic Byte Sniffing
 * **What it does:**
-  * When a public cloud URL is provided, the backend issues an HTTP request with `Range: bytes=0-15` to download **only the first 16 bytes** over the network ($< 40\text{ms}$).
-* **What it catches:**
-  1. **Disguised Malware:** If an executable file was renamed to `trojan.pdf`, it inspects the first 2 bytes. If they start with `b'MZ'` (the Windows executable header), it **immediately blocks the upload**.
-  2. **Fake PDF Files:** For `pdf` sources, it confirms the file header begins with `b'%PDF-'`.
+  * When a public cloud URL is provided, the backend issues an HTTP range request (`Range: bytes=0-15`) to verify the file on Cloudflare R2 / S3 before writing anything to PostgreSQL.
+* **What it catches (The Ghost Record Guardrail):**
+  1. **Non-Existent File (HTTP 404):** If the frontend calls `POST /api/rag/knowledge/` before the `PUT` upload finishes, or if the cloud upload failed, the backend detects `404 Not Found` and **immediately rejects the request**. This prevents broken "ghost" videos/PDFs from ever polluting your database!
+  2. **Access Forbidden (HTTP 403):** Catches misconfigured private bucket permissions.
+  3. **Empty File (0 bytes):** Rejects any file with `Content-Length: 0` or empty payload.
+  4. **Disguised Malware (.exe renamed to .pdf):** Inspects the first 2 bytes. If they start with `b'MZ'` (the Windows executable header), it **immediately blocks the upload**.
+  5. **Fake PDF Files:** For `pdf` sources, it confirms the file header begins with `b'%PDF-'`.
 
 ---
 
@@ -105,6 +109,9 @@ When validation fails, the API returns **`400 Bad Request`** with clear, descrip
 
 | Trigger Scenario | HTTP Status | Error Response Payload |
 | :--- | :---: | :--- |
+| **File Not Found in R2 (404)** | `400` | `{"sources": "Remote file at 'https://...r2.dev/...' does not exist (HTTP 404 Not Found). The file upload to Cloudflare R2 must complete successfully before submitting knowledge metadata."}` |
+| **Storage Access Denied (403)** | `400` | `{"sources": "Access denied to remote file at 'https://...r2.dev/...' (HTTP 403 Forbidden). Please ensure the file was uploaded and is publicly accessible via the storage CDN."}` |
+| **Empty File (0 bytes)** | `400` | `{"sources": "Remote file at '...' for language 'en' is empty (0 bytes). Uploaded files must not be empty."}` |
 | **Dangerous Executable** | `400` | `{"sources": {"0": {"file_url": ["Forbidden file extension '.exe'. Executable and script files are strictly blocked."]}}}` |
 | **Unauthorized Domain** | `400` | `{"sources": {"0": {"file_url": ["Unauthorized storage domain 'evil.com'. Files must be hosted on authorized cloud storage."]}}}` |
 | **Mismatched Media Type** | `400` | `{"sources": "URL extension '.mp4' for language 'en' does not match expected source type 'pdf'."}` |
@@ -273,3 +280,28 @@ Content-Type: application/json
 ```
 * **Expected Result:** `400 Bad Request`  
   `"start_time_seconds cannot be greater than end_time_seconds"`
+
+---
+
+#### Test 6: Missing / Non-Existent File Guardrail (HTTP 404)
+```json
+{
+  "title": "Ghost Record Test",
+  "source_type": "video",
+  "sources": [
+    {
+      "language": "en",
+      "file_url": "https://pub-d1cf39f6efc3465b9aff3a5e9d49aa54.r2.dev/non_existent_video.mp4"
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 0,
+      "title": "Intro"
+    }
+  ]
+}
+```
+* **Expected Result:** `400 Bad Request`  
+  `{"sources": "Remote file at 'https://pub-d1cf39f6efc3465b9aff3a5e9d49aa54.r2.dev/non_existent_video.mp4' does not exist (HTTP 404 Not Found). The file upload to Cloudflare R2 must complete successfully before submitting knowledge metadata."}`
+

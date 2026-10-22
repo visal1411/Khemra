@@ -4,6 +4,7 @@ from .views import (
     KnowledgeSearchAPI,
     KnowledgeDetailAPI,
     PresignedUrlAPI,
+    AIOverviewAPI,
 )
 
 urlpatterns = [
@@ -11,4 +12,6 @@ urlpatterns = [
     path("knowledge/", KnowledgeUploadAPI.as_view(), name="knowledge-upload"),
     path("knowledge/<uuid:id>/", KnowledgeDetailAPI.as_view(), name="knowledge-detail"),
     path("knowledge/search/", KnowledgeSearchAPI.as_view(), name="knowledge-search"),
+    path("knowledge/search/ai-overview/", AIOverviewAPI.as_view(), name="knowledge-search-ai-overview"),
 ]
+

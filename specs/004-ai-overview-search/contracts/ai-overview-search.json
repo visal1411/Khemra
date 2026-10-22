@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AIOverviewSearchRequestAndResponse",
+  "definitions": {
+    "StepItem": {
+      "type": "object",
+      "required": ["step_number", "title", "instruction", "segment_id"],
+      "properties": {
+        "step_number": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" },
+        "instruction": { "type": "string" },
+        "segment_id": { "type": "string", "format": "uuid" }
+      }
+    },
+    "SearchResultItem": {
+      "type": "object",
+      "required": ["segment_id", "knowledge_id", "knowledge_title", "source_type", "score"],
+      "properties": {
+        "segment_id": { "type": "string", "format": "uuid" },
+        "knowledge_id": { "type": "string", "format": "uuid" },
+        "knowledge_title": { "type": "string" },
+        "source_type": { "type": "string", "enum": ["video", "pdf", "text"] },
+        "segment_index": { "type": "integer" },
+        "title": { "type": ["string", "null"] },
+        "summary": { "type": ["string", "null"] },
+        "transcript": { "type": ["string", "null"] },
+        "start_time_seconds": { "type": ["number", "null"] },
+        "end_time_seconds": { "type": ["number", "null"] },
+        "page_start": { "type": ["integer", "null"] },
+        "page_end": { "type": ["integer", "null"] },
+        "keywords": { "type": "array", "items": { "type": "string" } },
+        "score": { "type": "number" },
+        "confidence": { "type": "number" },
+        "best_match": { "type": "string" },
+        "confidence_by_type": { "type": "object" },
+        "matched_source": { "type": ["object", "null"] }
+      }
+    }
+  },
+  "request": {
+    "type": "object",
+    "required": ["question"],
+    "properties": {
+      "question": { "type": "string", "minLength": 1 },
+      "language": { "type": "string", "default": "en" },
+      "top_k": { "type": "integer", "default": 5 },
+      "threshold": { "type": "number", "default": 0.25 },
+      "weights": {
+        "type": "object",
+        "properties": {
+          "question": { "type": "number" },
+          "keyword": { "type": "number" },
+          "summary": { "number": "number" },
+          "topic": { "type": "number" }
+        }
+      }
+    }
+  },
+  "response": {
+    "type": "object",
+    "required": ["question", "language", "summary", "steps", "count", "results"],
+    "properties": {
+      "question": { "type": "string" },
+      "language": { "type": "string" },
+      "summary": { "type": ["string", "null"] },
+      "steps": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/StepItem" }
+      },
+      "count": { "type": "integer" },
+      "weights_used": { "type": "object" },
+      "results": {
+        "type": "array",
+        "items": { "$ref": "#/definitions/SearchResultItem" }
+      }
+    }
+  }
+}
