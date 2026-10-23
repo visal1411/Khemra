@@ -1,12 +1,13 @@
 services:
   web:
     build: .
-    # migrate -> seed metadata types -> start server
-    env_file:             # <--- ADD THESE TWO LINES
+    # migrate -> seed metadata types -> load seed data -> start server
+    env_file:           
       - .env   
     command: >
       sh -c "python manage.py migrate &&
              python manage.py seed_metadata_types &&
+             python manage.py loaddata seed_data/v1/seed.json &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
       FASTEMBED_CACHE_DIR: /app/.cache/fastembed
