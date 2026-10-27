@@ -456,5 +456,5 @@ When an error occurs, the backend returns **HTTP `400 Bad Request`** with action
 | **`400`** | Dangerous executable extension | `{"sources": "Forbidden file extension '.exe'..."}` | Block upload immediately in file picker. |
 | **`400`** | Mismatched file extension vs type | `{"sources": "URL extension '.mp4' does not match source type 'pdf'..."}` | Ensure correct file type is selected. |
 | **`400`** | Empty search question | `{"question": "Search question cannot be empty or whitespace only."}` | Disable search button when input is empty. |
-| **`404`** | Knowledge ID not found | `{"detail": "Not found."}` | Redirect user to 404 / catalog page. |
+| **`404`** | Knowledge ID not found | `{"detail": "Not found."}` | Redirect user to 404 / search page. |
 | **`200`** | LLM timeout or offline | Returns `summary: null`, `steps: []`, `results: [...]` | Render results normally; hide the AI Overview card without erroring. |

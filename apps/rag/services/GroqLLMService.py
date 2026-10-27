@@ -21,27 +21,29 @@ class GroqLLMService(BaseLLMService):
 You will be given a user's question and a list of verified knowledge segments retrieved from company videos and documents.
 
 Your job:
-1. Provide a concise, revised 'summary' directly answering the user's question in a professional, natural tone.
-2. Break down the instructions into sequential 'steps' (1, 2, 3...).
+1. Provide a concise, beginner-friendly 'summary' directly answering the user's question in a clear, natural tone.
+2. Break down the process into granular, sequential 'steps' (1, 2, 3...). If the context contains multiple distinct actions, tasks, or recommendations (even within a single stage or phase), break them down into separate actionable steps.
 3. For each step:
-   - Provide an action-oriented 'title' (e.g. "Open the login portal").
-   - Provide clear 'instruction' text explaining what to do.
+   - Provide an action-oriented 'title' (e.g. "Brainstorm and Gather Business Ideas").
+   - Provide a clear, detailed 'instruction' thoroughly explaining what to do based on all facts in the text.
    - Attach the exact 'segment_id' of the source segment that explains or demonstrates this step.
 
 CRITICAL RULES & CONSTRAINTS:
+- Minimum Steps: ALWAYS provide at least 2 to 5 distinct sequential steps in the 'steps' array whenever the source material contains multiple actions, tasks, or recommendations. NEVER return only 1 single step. Even if the user asks for 'the first step' or a single topic, break down that process into its granular sequential sub-actions (e.g. Step 1: Brainstorm ideas, Step 2: Evaluate pros/cons & market potential, Step 3: Consult trusted advisors).
+- Language: ALWAYS output the entire response strictly in English. Even if the user's question is in Khmer, the target language parameter is "km", or the provided source materials contain Khmer text, all fields ('summary', 'title', 'instruction') MUST be written in clear English. Never output in Khmer.
+- Beginner-Friendly & Accessible: Ensure the content is easy to understand for users who have little or no prior knowledge of business management. Use simple, accessible English, avoid complex business jargon, and explain concepts straightforwardly so anyone can easily follow.
 - Strict Factual Grounding (Anti-Hallucination): You must answer STRICTLY and ONLY based on the facts explicitly stated in the provided segment 'summary' and 'transcript'.
 - Zero Outside Information: Do NOT invent, extrapolate, speculate, or make assumptions. Do NOT mention external tools, websites, buttons, or procedures that are not explicitly present in the provided text.
 - Missing Information: If the provided segments do not fully answer the question or lack certain procedural details, state ONLY what is documented and do NOT fill in the blanks with outside knowledge.
 - Referential Integrity: 'segment_id' MUST exactly match one of the segment UUIDs provided in the context.
-- Language: Output the response in the requested language (e.g. English or Khmer).
 - Format: You must output ONLY a valid JSON object matching this schema:
   {
-    "summary": "Cohesive natural language answer summary...",
+    "summary": "Cohesive natural language answer summary in English...",
     "steps": [
       {
         "step_number": 1,
-        "title": "Short title",
-        "instruction": "Detailed instruction...",
+        "title": "Short title in English",
+        "instruction": "Detailed instruction in English...",
         "segment_id": "exact-uuid-from-context"
       }
     ]
@@ -52,13 +54,13 @@ CRITICAL RULES & CONSTRAINTS:
         api_key: str = None,
         model: str = None,
         api_base: str = None,
-        timeout: float = 4.0,
+        timeout: float = 8.0,
     ):
         self.api_key = api_key or getattr(settings, "GROQ_API_KEY", "")
         self.model = model or getattr(settings, "GROQ_MODEL", "openai/gpt-oss-120b")
         raw_base = api_base or getattr(settings, "GROQ_API_BASE", "https://api.groq.com/openai/v1")
         self.api_base = raw_base.rstrip("/")
-        self.timeout = timeout
+        self.timeout = getattr(settings, "GROQ_TIMEOUT", timeout)
 
     def _format_context(self, segments: List[Dict[str, Any]]) -> str:
         blocks = []
@@ -101,10 +103,12 @@ CRITICAL RULES & CONSTRAINTS:
         context_str = self._format_context(segments)
         user_message = (
             f"User Question: {question}\n"
-            f"Target Language: {language}\n\n"
+            f"Output Language: English (MANDATORY: Output all summary, titles, and instructions strictly in English, even if the requested language is '{language}')\n\n"
             f"Verified Knowledge Segments:\n---\n{context_str}\n---\n"
             f"CRITICAL REMINDER: Synthesize your answer and steps using ONLY the facts explicitly provided in the summary and transcript above. "
-            f"Do NOT invent any steps, external URLs, tools, or procedures."
+            f"Break down the answer into at least 2 to 5 distinct, sequential sub-steps (NEVER return only 1 step). "
+            f"Do NOT invent any steps, external URLs, tools, or procedures. "
+            f"Write the entire response strictly in English."
         )
 
         payload = {
@@ -114,7 +118,7 @@ CRITICAL RULES & CONSTRAINTS:
                 {"role": "user", "content": user_message},
             ],
             "temperature": 0.1,
-            "max_tokens": 1024,
+            "max_tokens": 2048,
             "top_p": 0.9,
             "response_format": {"type": "json_object"},
         }

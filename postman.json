@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "c1f24d77-628f-4d92-9f33-1463e26bbbb0",
-    "name": "Khemra Knowledge RAG & Catalog API",
-    "description": "Complete Postman collection for the Khemra RAG API (Ingestion, Multi-signal Vector Search, and Details) and Catalog API. Includes automated test scripts to capture knowledge_id into collection variables.",
+    "name": "Khemra Knowledge RAG API",
+    "description": "Complete Postman collection for the Khemra RAG API (Ingestion, Multi-signal Vector Search, and Details). Includes automated test scripts to capture knowledge_id into collection variables.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -689,25 +689,6 @@
               "path": ["api", "rag", "knowledge", "{{knowledge_id}}", ""]
             },
             "description": "Fetches complete knowledge record including all sources (with file_url and duration_seconds/page_count) and all segments with timestamps and keywords."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "5. Catalog API (Legacy)",
-      "item": [
-        {
-          "name": "Get Products List",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/products/",
-              "host": ["{{base_url}}"],
-              "path": ["api", "products", ""]
-            },
-            "description": "Fetch catalog products list."
           },
           "response": []
         }

@@ -17,8 +17,6 @@ This document provides a comprehensive guide to all Serializers implemented acro
    - [KnowledgeDetailSerializer](#knowledgedetailserializer)
    - [KnowledgeSourceDetailSerializer](#knowledgesourcedetailserializer)
    - [KnowledgeSegmentDetailSerializer](#knowledgesegmentdetailserializer)
-5. [Catalog Serializers](#5-catalog-serializers)
-   - [ProductSerializer](#productserializer)
 
 ---
 
@@ -32,7 +30,6 @@ This document provides a comprehensive guide to all Serializers implemented acro
 | **`apps.rag`** | [`KnowledgeSearchRequestSerializer`](#knowledgesearchrequestserializer) | `Serializer` | **Input** | Validates search queries, threshold, top_k, and custom weights |
 | **`apps.rag`** | [`KnowledgeSearchResponseSerializer`](#knowledgesearchresponseserializer) | `Serializer` | **Output** | Serializes ranked search results and match confidence scores |
 | **`apps.rag`** | [`KnowledgeDetailSerializer`](#knowledgedetailserializer) | `ModelSerializer` | **Output** | Serializes full knowledge entity, sources, and segments |
-| **`apps.catalog`** | [`ProductSerializer`](#productserializer) | `ModelSerializer` | **Both** | Serializes e-commerce catalog products |
 
 ---
 
@@ -184,28 +181,6 @@ ModelSerializer for reading the full knowledge record.
   * `sources`: Read-only nested list via `KnowledgeSourceDetailSerializer`.
   * `segments`: Read-only nested list via `KnowledgeSegmentDetailSerializer`.
 * **Fields:** `id`, `title`, `description`, `source_type`, `processing_status`, `created_at`, `updated_at`, `sources`, `segments`.
-
----
-
-## 5. Catalog Serializers
-
-**File:** [`apps/catalog/serializers/ProductSerializer_.py`](file:///d:/Khemra%20Backend/my-django-dockerv2/apps/catalog/serializers/ProductSerializer_.py)  
-**Endpoint:** `/api/catalog/products/`
-
-### `ProductSerializer`
-ModelSerializer for managing product catalog items.
-
-* **Model:** `Product`
-* **Fields:**
-  * `id` *(read-only)*
-  * `name`: Name of product.
-  * `description`: Product details.
-  * `price`: Decimal price.
-  * `stock_quantity`: Integer inventory quantity.
-  * `image_url`: Product thumbnail link.
-  * `is_available`: Boolean availability flag.
-  * `created_at` *(read-only)*
-  * `updated_at` *(read-only)*
 
 ---
 
